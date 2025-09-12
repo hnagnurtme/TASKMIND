@@ -28,6 +28,10 @@ export default function useRoutesElements () {
             path: '/register',
             element: isAuthenticated ? <Navigate to='/taskmind' /> : <Register />,
         },
+        {
+            path: '/',
+            element: <Navigate to='/taskmind' />,
+        },
         { path: '*', element: <h1>404</h1> },
 
     ] );
