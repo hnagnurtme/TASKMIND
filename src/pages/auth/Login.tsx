@@ -21,9 +21,17 @@ const Login = () => {
         try {
             AuthService.login( loginData ).then( ( response ) => {
                 if ( response.success ) {
-                    setSessionAuth( );
-                    setIsAuthenticated( true );
-                    toast.success( 'Login successful!' );
+                    console.log( 'Login response:', JSON.stringify( response ) );
+                    const { user} = response;
+                    if ( user ) {
+                        const { uid} = user;
+                        setSessionAuth(uid );
+                        setIsAuthenticated( true );
+                        toast.success( 'Login successful!' );
+                    }
+                    else{
+                        toast.error( 'User data is missing in the response' );
+                    }
                     navigate("/taskmind");
                 } else {
                     toast.error( 'Login failed ');

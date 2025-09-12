@@ -4,6 +4,7 @@ export interface IUser {
     email: string;
     created_at?: string;
     updated_at?: string;
+    tasks?: any[];
 }
 
 interface DataType {

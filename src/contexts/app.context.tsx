@@ -1,6 +1,7 @@
 import { ReactWithChild } from '@/interface/app'
 import { getSessionAuth } from '@/utils/storage'
 import { createContext, useState } from 'react'
+import { TasksProvider } from '@/contexts/tasks.context'
 
 export interface AppContextType {
   isAuthenticated: boolean
@@ -19,7 +20,9 @@ const AppContextProvider = ({ children }: ReactWithChild) => {
 
   return (
     <AppContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-      {children}
+      <TasksProvider>
+        {children}
+      </TasksProvider>
     </AppContext.Provider>
   )
 }

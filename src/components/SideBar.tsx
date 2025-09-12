@@ -1,7 +1,6 @@
 import { TSidebarLinks } from '@/types/general.type';
 import { Link, useLocation } from 'react-router-dom';
 import { sidebarLinks } from '@/constants/general.const';
-// import './Sidebar.css';
 
 // ========================= INTERFACES =========================
 interface ISidebarLinkProps {

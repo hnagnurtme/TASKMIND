@@ -57,8 +57,8 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) =
     setTimeout(() => onDelete(task.id), 300);
   }, [task.id, onDelete]);
 
-  const energyConfig = getEnergyConfig(task.energy);
-  const priorityConfig = getPriorityConfig(task.priority); // 👈 thêm priority
+  const energyConfig = getEnergyConfig(task.complexity);
+  const priorityConfig = getPriorityConfig(task.priority); 
   const deadlineInfo = formatDeadline(task.deadline);
 
   return (
@@ -97,7 +97,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) =
               title={energyConfig.label}
             >
               <span className="energy-icon">{energyConfig.icon}</span>
-              <span className="energy-text">{task.energy}</span>
+              <span className="energy-text">{task.complexity}</span>
             </div>
 
             {/* Priority Badge */}

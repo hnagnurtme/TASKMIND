@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import TaskItem from './TaskItem';
-import AddTask from './AddTask';
-import { useTasks } from '@/hooks/useTasks';
+import TaskModal from './AddTask'; // Updated import to TaskModal
+import { useTasks } from '@/contexts/tasks.context';
+import { Task } from '@/interface/task';
 
 // ----------------------------
 // TaskList Component chính
@@ -17,13 +18,24 @@ const TaskList: React.FC = () => {
     deleteTask
   } = useTasks();
 
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
+
+  const handleOpenAddModal = () => {
+    setTaskToEdit(null);
+    setShowModal(true);
+  };
+
+  const handleOpenEditModal = (task: any) => {
+    setTaskToEdit(task);
+    setShowModal(true);
+  };
 
   return (
     <div className="task-list">
       <TaskListHeader
         taskCount={tasks.length}
-        onOpenAddModal={() => setShowAddModal(true)}
+        onOpenAddModal={handleOpenAddModal}
       />
 
       <TaskStats stats={stats} />
@@ -31,15 +43,27 @@ const TaskList: React.FC = () => {
       <TasksContainer
         tasks={sortedTasks}
         onToggleComplete={toggleComplete}
-        onEdit={editTask}
+        onEdit={handleOpenEditModal}
         onDelete={deleteTask}
-        onOpenAddModal={() => setShowAddModal(true)}
+        onOpenAddModal={handleOpenAddModal}
       />
 
-      <AddTask
-        isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
-        onAddTask={addTask}
+      <TaskModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onSubmit={(task) => {
+          if (taskToEdit) {
+            editTask({
+              id: taskToEdit.id,
+              completed: taskToEdit.completed,
+              completedAt: taskToEdit.completedAt,
+              ...task
+            });
+          } else {
+            addTask(task);
+          }
+        }}
+        taskToEdit={taskToEdit}
       />
     </div>
   );
