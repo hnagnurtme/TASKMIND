@@ -1,68 +1,198 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+/* Base Styles */
+body, html {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Utility Classes */
+.flex {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.flex-col {
+  flex-direction: column;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.flex-center {
+  align-items: center;
+  justify-content: center;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+/* SideBar Styles */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #1a202c;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar a {
+  color: #cbd5e0;
+  text-decoration: none;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s;
+}
+
+.sidebar a:hover {
+  background-color: #2d3748;
+}
+
+.sidebar .active {
+  background-color: #4a5568;
+}
+
+/* Layout Body Styles */
+.layout-body {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 60px); /* Full height minus the topbar */
+  margin-top: 0; /* Removed extra spacing */
+}
+
+/* Sidebar Container Styles */
+.sidebar-container {
+  width: 250px;
+  flex-shrink: 0;
+  background-color: #1a202c;
+  color: #fff;
+  height: 100%;
+}
+
+/* TopBar Styles */
+.topbar {
+  width: 100%;
+  height: 60px;
+  background-color: #2d3748;
+  /* color: #fff; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%; /* Ensure it fills the height of the topbar */
+  padding-right: 1rem; /* Add some spacing on the right */
+}
+
+.topbar .logo img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.topbar .menu {
+  display: flex;
+  gap: 1rem;
+}
+
+.topbar .menu a {
+  /* color: #cbd5e0; */
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s;
+}
+
+.topbar .menu a:hover {
+  background-color: #4a5568;
+}
+
+/* Main Content Styles */
+.main-content {
+  flex: 1;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+}
+
+/* Main Content Styles for Home */
+.main-content {
+  margin-left: 250px; /* Adjust to match the sidebar width */
+  margin-top: 60px; /* Adjust to match the topbar height */
+  padding: 1rem;
+  background-color: #f9f9f9;
+  height: calc(100vh - 60px); /* Ensure it fits below the topbar */
+  overflow-y: auto;
+  position: relative; /* Ensure proper stacking context */
+  z-index: 1; /* Place it above default elements */
+}
+
+/* Logo */
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2d3748;
+}
+
+/* Logo Styles */
+.logo-image {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+/* Placeholder Styles */
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #888;
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
+.logout-button {
+  background-color: #1a202c; /* Dark background */
+  color: #fff;
+  font-weight: bold;       /* text in đậm */
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: background-color 0.3s;
+  display: flex;           /* để căn giữa nội dung */
+  align-items: center;     /* căn theo chiều dọc */
+  justify-content: center; /* căn theo chiều ngang */
+  text-align: center;      /* đảm bảo text chính giữa */
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.logout-button:hover {
+  background-color: #2d3748; /* hover effect */
+}
+
+/* User Admin Styles */
+.user-admin {
+  display: flex; /* Align items horizontally */
+  align-items: center; /* Center items vertically */
+  justify-content: flex-end; /* Align to the right */
+  gap: 1rem; /* Space between elements */
+  padding: 0.5rem 1rem; /* Add padding for spacing */
+  background-color: #1a202c; /* Dark background */
+  border-radius: 0.375rem; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
