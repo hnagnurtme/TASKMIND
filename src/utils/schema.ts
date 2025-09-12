@@ -30,5 +30,4 @@ export const FormSchemaRegister = z.object({
     })
     .regex(validator.password, 'Password must contain at least 8 characters'),
   name: z.string().min(1, { message: 'Name is required' }),
-  role: z.number().min(1, { message: 'Role is required' }),
 });

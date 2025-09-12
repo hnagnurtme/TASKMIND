@@ -1,14 +1,37 @@
-import React, { useState } from 'react';
-import './auth.css'; // Importing shared CSS for auth pages
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import './auth.css'; 
+import { Link, useNavigate } from 'react-router-dom';
 import backwebm from '@/assets/backwebm.webm';
+import { AuthService } from '@/module/auth/AuthService';
+import { LoginModel } from '@/module/auth/LoginModel';
+import { toast } from 'sonner';
+import { setSessionAuth } from '@/utils/storage';
+import { AppContext } from '@/contexts/app.context';
+
+
 const Login = () => {
+    const { setIsAuthenticated } = useContext(AppContext);
+    const navigate = useNavigate();
     const [ email, setEmail ] = useState( '' );
     const [ password, setPassword ] = useState( '' );
 
     const handleSubmit = ( event: React.FormEvent ) => {
         event.preventDefault();
-        console.log( 'Email:', email, 'Password:', password );
+        const loginData: LoginModel = { email, password };
+        try {
+            AuthService.login( loginData ).then( ( response ) => {
+                if ( response.success ) {
+                    setSessionAuth( );
+                    setIsAuthenticated( true );
+                    toast.success( 'Login successful!' );
+                    navigate("/taskmind");
+                } else {
+                    toast.error( 'Login failed ');
+                }
+            } );
+        } catch ( error ) {
+            toast.error( 'An error occurred during login' );
+        }
     };
 
     return (
