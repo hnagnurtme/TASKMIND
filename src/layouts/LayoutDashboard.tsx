@@ -1,4 +1,4 @@
-import Sidebar from '@/components/SideBar';
+import SidebarDashBoard from '@/components/SideBarDashBoard';
 import TopBar from '@/components/TopBar';
 import React from 'react';
 
@@ -18,7 +18,7 @@ const LayoutDashboard: React.FC<ILayoutDashboardProps> = ({ children }) => {
       <div className="layout-body">
         {/* Sidebar - On the left */}
         <div className="sidebar-container">
-          <Sidebar />
+          <SidebarDashBoard />
         </div>
 
         {/* Main content - Remaining space */}

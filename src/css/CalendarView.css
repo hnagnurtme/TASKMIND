@@ -1,0 +1,189 @@
+.rbc-calendar {
+  font-family: 'Inter', sans-serif;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f1f5f9;
+}
+
+/* Header */
+.rbc-toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.rbc-toolbar button {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #1e293b;
+  transition: all 0.2s ease;
+}
+
+.rbc-toolbar button:hover {
+  background: #e2e8f0;
+}
+
+/* Today button highlight */
+.rbc-toolbar button.rbc-active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+/* Labels */
+.rbc-header {
+  padding: 8px 0;
+  font-weight: 600;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Time grid background */
+.rbc-time-view,
+.rbc-month-view {
+  border-color: #e2e8f0;
+}
+
+/* Events */
+.rbc-event {
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  color: #fff;
+}
+
+/* Dynamic priority-like colors */
+.rbc-event.high {
+  background-color: #dc2626;
+  border-color: #fee2e2;
+}
+.rbc-event.medium {
+  background-color: #d97706;
+  border-color: #fef3c7;
+}
+.rbc-event.low {
+  background-color: #2563eb;
+  border-color: #dbeafe;
+}
+
+/* Today highlight */
+.rbc-today {
+  background-color: #f0f9ff !important;
+}
+
+/* === Calendar Container === */
+.rbc-calendar {
+  font-family: "Inter", system-ui, sans-serif;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f1f5f9;
+  overflow: hidden;
+}
+
+/* === Toolbar (nút điều hướng + view) === */
+.rbc-toolbar {
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rbc-toolbar button {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.rbc-toolbar button:hover {
+  background: #f1f5f9;
+}
+
+.rbc-toolbar button.rbc-active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* === Ngày / Giờ trong Calendar === */
+.rbc-month-view {
+  border-top: 1px solid #e2e8f0;
+}
+
+.rbc-month-row + .rbc-month-row {
+  border-top: 1px solid #e2e8f0;
+}
+
+.rbc-header {
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 8px;
+  text-transform: capitalize;
+  font-weight: 600;
+  color: #475569;
+  font-size: 13px;
+}
+
+/* Hôm nay highlight */
+.rbc-today {
+  background-color: #eff6ff !important;
+}
+
+/* Ngày cuối tuần */
+.rbc-off-range-bg,
+.rbc-day-bg.rbc-off-range {
+  background-color: #f9fafb;
+}
+
+.rbc-day-bg.rbc-sat,
+.rbc-day-bg.rbc-sun {
+  background-color: #fef2f2;
+}
+
+/* === Sự kiện (task) === */
+.rbc-event {
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.rbc-event:hover {
+  transform: scale(1.03);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Priority màu */
+.rbc-event.high {
+  background-color: #dc2626; /* đỏ */
+}
+
+.rbc-event.medium {
+  background-color: #f59e0b; /* cam */
+}
+
+.rbc-event.low {
+  background-color: #2563eb; /* xanh */
+}

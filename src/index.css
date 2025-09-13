@@ -115,7 +115,7 @@ code {
 
 /* TaskItem.css */
 
-.task-item {
+.task-item .empty-add-btn {
   display: flex;
   align-items: flex-start;
   gap: 16px;
@@ -1872,4 +1872,27 @@ code {
   border: 2px solid #e5e7eb;
   border-bottom: none;
   color: #10b981;
+}
+
+
+
+/* === Agenda view === */
+.rbc-agenda-view table {
+  border: none;
+  font-size: 14px;
+}
+
+.rbc-agenda-date-cell {
+  font-weight: 600;
+  color: #334155;
+}
+
+.rbc-agenda-event-cell {
+  font-weight: 500;
+}
+
+/* === Current time indicator (trong Day/Week view) === */
+.rbc-current-time-indicator {
+  height: 2px;
+  background: #ef4444;
 }

@@ -1,5 +1,5 @@
 /* Button Component Styles */
-.btn {
+.btn .empty-add-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;

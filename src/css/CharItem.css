@@ -1,0 +1,36 @@
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  width: 100%;
+  height: auto;
+  margin-top: 20px;
+}
+
+@media (min-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: repeat(3, 1fr);
+    height: 500px;
+  }
+}
+
+.chart-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chart-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.chart-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #1e293b;
+  text-align: center;
+}

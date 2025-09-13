@@ -2,8 +2,11 @@
 import { AppContext, AppContextType } from '@/contexts/app.context';
 import LayoutDashboard from '@/layouts/LayoutDashboard';
 import LayoutMain from '@/layouts/LayoutMain';
+import AI from '@/pages/aiassitant';
 import Login from '@/pages/auth/Login';
 import Register from '@/pages/auth/Register';
+import Calendar from '@/pages/calendar';
+import Chart from '@/pages/chart';
 import DashBoard from '@/pages/dashboard';
 import Home from '@/pages/home';
 import { useContext } from 'react';
@@ -31,10 +34,34 @@ export default function useRoutesElements () {
             element: isAuthenticated ? <Navigate to='/login' /> : <Register />,
         },
         {
+            path: '/chart',
+            element:
+                <ProtectedRoute>
+                     <LayoutDashboard children={ <Chart /> } />
+                </ProtectedRoute>
+
+        },
+        {
+            path: '/calendar',
+            element:
+                <ProtectedRoute>
+                     <LayoutDashboard children={ <Calendar /> } />
+                </ProtectedRoute>
+
+        },
+        {
             path: '/taskmind',
             element:
                 <ProtectedRoute>
                      <LayoutDashboard children={ <DashBoard /> } />
+                </ProtectedRoute>
+
+        },
+        {
+            path: '/ai',
+            element:
+                <ProtectedRoute>
+                     <LayoutDashboard children={ <AI /> } />
                 </ProtectedRoute>
 
         },
