@@ -1,14 +1,16 @@
 import { useState, useCallback } from "react";
 import { Task } from "@/interface/task";
+import "@/css/TaskItem.css";
 
 interface TaskItemProps {
   task: Task;
   onToggleComplete: (taskId: string) => void;
   onEdit: (task: Task) => void;
   onDelete: (taskId: string) => void;
+  loading?: boolean; // Added loading prop
 }
 
-const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) => {
+const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, loading }: TaskItemProps) => {
   const [showActions, setShowActions] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -74,7 +76,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) =
 
   return (
     <div
-      className={`task-item ${task.completed ? "completed" : "incomplete"} ${!task.completed && task.priority === "high" ? "high-priority" : ""} ${isDeleting ? "deleting" : ""}`}
+      className={`task-item ${task.completed ? "completed" : "incomplete"} ${!task.completed && task.priority === "high" ? "high-priority" : ""} ${isDeleting ? "deleting" : ""} ${loading ? "loading" : ""}`}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
     >

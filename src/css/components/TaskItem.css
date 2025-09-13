@@ -81,3 +81,21 @@
 .task-item.high-priority {
   animation: pulseHighPriority 1.5s ease-in-out infinite;
 }
+
+/* Added animation for loading tasks */
+.task-item.loading {
+  background: #e0f7fa; /* Light blue background */
+  animation: loadingAnimation 1.5s ease-in-out infinite;
+}
+
+@keyframes loadingAnimation {
+  0% {
+    background-color: #e0f7fa;
+  }
+  50% {
+    background-color: #b2ebf2;
+  }
+  100% {
+    background-color: #e0f7fa;
+  }
+}
