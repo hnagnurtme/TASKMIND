@@ -110,30 +110,45 @@ function TasksContainer({
   onDelete,
   onOpenAddModal
 }: TasksContainerProps) {
-  if (tasks.length === 0) {
-    return (
-      <div className="empty-state">
-        <div className="empty-icon">📝</div>
-        <h3>Chưa có task nào</h3>
-        <p>Thêm task đầu tiên để bắt đầu quản lý công việc của bạn!</p>
-        <button className="empty-add-btn" onClick={onOpenAddModal}>
-          ➕ Thêm task đầu tiên
-        </button>
-      </div>
-    );
-  }
+  // Sort tasks: incomplete first, then by dueDate ascending
+  const sortedTasks = [...tasks].sort((a, b) => {
+    if (a.completed !== b.completed) {
+      return a.completed ? 1 : -1; // incomplete first
+    }
+    // Both tasks have same completion status, sort by dueDate
+    return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+  });
 
+  // Calculate stats from tasks
+  const stats = {
+    incomplete: tasks.filter(task => !task.completed).length,
+    completed: tasks.filter(task => task.completed).length,
+    overdue: tasks.filter(task => new Date(task.dueDate) < new Date() && !task.completed).length
+  };
+  
   return (
-    <div className="task-items">
-      {tasks.map(task => (
-        <TaskItem
-          key={task.id}
-          task={task}
-          onToggleComplete={onToggleComplete}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
-      ))}
-    </div>
+    <>
+      <TaskStats stats={stats} />
+      
+      {tasks.length > 0 ? (
+        <div className="task-items">
+          {sortedTasks.map(task => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              onToggleComplete={onToggleComplete}
+              onEdit={() => onEdit(task)}
+              onDelete={onDelete}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="task-items">
+          <button className="empty-add-btn" onClick={onOpenAddModal}>
+            ➕ Thêm task đầu tiên
+          </button>
+        </div>
+      )}
+    </>
   );
 }

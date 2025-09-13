@@ -52,6 +52,11 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) =
     return { text: date.toLocaleDateString("vi-VN"), className: "future", urgent: false };
   };
 
+  const formatDateTime = (dateTimeString: string) => {
+    const date = new Date(dateTimeString);
+    return date.toISOString().slice(0, 16); // Formats to 'yyyy-MM-ddThh:mm'
+  };
+
   const handleDelete = useCallback(() => {
     if (!task.completed) {
       setIsDeleting(true);
@@ -69,7 +74,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) =
 
   return (
     <div
-      className={`task-item ${task.completed ? "completed" : ""} ${isDeleting ? "deleting" : ""}`}
+      className={`task-item ${task.completed ? "completed" : "incomplete"} ${!task.completed && task.priority === "high" ? "high-priority" : ""} ${isDeleting ? "deleting" : ""}`}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
     >
@@ -139,7 +144,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) =
           <div className="completion-info">
             <span className="completion-icon">✅</span>
             <span className="completion-text">
-              Hoàn thành lúc {new Date(task.completedAt).toLocaleString("vi-VN")}
+              Hoàn thành lúc {formatDateTime(task.completedAt)}
             </span>
           </div>
         )}

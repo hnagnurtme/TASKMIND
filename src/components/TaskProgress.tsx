@@ -14,7 +14,9 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
   filledColor = "#10b981",
   emptyColor = "#e5e7eb",
 }) => {
-  const clampedPercent = Math.max(0, Math.min(100, completionPercent)); // đảm bảo 0-100
+  const clampedPercent = Math.round(
+    Math.max(0, Math.min(100, completionPercent)) * 100
+  ); 
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -47,6 +49,5 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
 };
 
 export default TaskProgress;
-
 
 // ----------------------------

@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div className="main-content">
       <TaskProgress completionPercent={completionPercent} />
-      <h1 className="home-title">Welcome to Todo App</h1>
+      <h1 className="home-title">Welcome to TaskMind</h1>
       < TaskList />
     </div>
   );

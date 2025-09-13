@@ -2,7 +2,7 @@ import { AppContext, AppContextType } from '@/contexts/app.context';
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { Search, Plus, User, LogOut } from 'lucide-react';
+import {  Plus, User, LogOut } from 'lucide-react';
 import TaskModal from './AddTask'; // Updated import to TaskModal
 import Modal from 'react-modal';
 import { useTasks } from '@/contexts/tasks.context';
@@ -15,7 +15,7 @@ const TopBar = () => {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Implement search functionality
+        
         console.log('Searching for:', searchTerm);
     };
 
@@ -44,7 +44,7 @@ const TopBar = () => {
                     onClose={() => setShowAddTaskModal(false)} 
                     isOpen={showAddTaskModal}
                     onSubmit={(task) => {
-                        addTask(task); // Gọi hàm addTask để cập nhật danh sách
+                        addTask(task);
                         setShowAddTaskModal(false);
                     }}
                 />
@@ -74,7 +74,6 @@ function SearchBar({ searchTerm, setSearchTerm, onSearch }: SearchBarProps) {
     return (
         <form className='search-form' onSubmit={onSearch}>
             <div className='search-container'>
-                <Search className='search-icon' size={20} />
                 <input
                     type='text'
                     placeholder='Tìm task theo tên...'
