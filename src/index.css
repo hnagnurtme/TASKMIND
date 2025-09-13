@@ -103,8 +103,8 @@ code {
 
 .main-content {
     flex: 1;
-    margin-left: 250px;
-    margin-top: 64px;
+    margin-left: 130px;
+    margin-top: 20px;
     padding: 24px;
     background: #f8fafc;
     min-height: calc(100vh - 64px);

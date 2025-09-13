@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState, useMemo, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { Task } from '@/interface/task';
 import { TaskService } from '@/module/task/TaskService';
 import { getSessionUid } from '@/utils/storage';
+
 interface TasksContextType {
   tasks: Task[];
   sortedTasks: Task[];
@@ -11,6 +12,7 @@ interface TasksContextType {
     completed: number;
     overdue: number;
   };
+  setTasksFromLogin: (tasks: Task[]) => void;
   addTask: (taskData: Omit<Task, 'id' | 'completed' | 'completedAt'>) => void;
   toggleComplete: (taskId: string) => void;
   editTask: (editedTask: Task) => void;
@@ -20,27 +22,32 @@ interface TasksContextType {
 const TasksContext = createContext<TasksContextType | undefined>(undefined);
 
 export const TasksProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [uid] = useState<string | null>(getSessionUid() ?? null);
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  // -------------------
-  // Load tasks từ Firestore khi mount
-  // -------------------
+  // Load tasks realtime khi uid thay đổi
   useEffect(() => {
-    const uid = getSessionUid();
     if (!uid) return;
 
-    const loadTasks = async () => {
-      try {
-        const userTasks = await TaskService.getAllTasksById(uid) ?? []; 
-        setTasks(userTasks);
-        console.log('Loaded tasks for user:', uid, userTasks);
-      } catch (err) {
-        console.error('Error loading tasks from DB:', err);
-      }
+    let unsubscribe: (() => void) | null = null;
+
+    const loadRealtimeTasks = async () => {
+      unsubscribe = await TaskService.listenTasks(uid, (fetchedTasks) => {
+        setTasks(fetchedTasks);
+      });
     };
 
-    loadTasks();
-  }, []);
+    loadRealtimeTasks();
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [uid]);
+
+  // Cho phép set tasks trực tiếp từ login response
+  const setTasksFromLogin = (loginTasks: Task[]) => {
+    setTasks(loginTasks);
+  };
 
   const sortedTasks = useMemo(() => {
     return [...tasks].sort((a, b) => {
@@ -49,63 +56,52 @@ export const TasksProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   }, [tasks]);
 
-  const stats = useMemo(() => {
-    return {
-      total: tasks.length,
-      incomplete: tasks.filter((t) => !t.completed).length,
-      completed: tasks.filter((t) => t.completed).length,
-      overdue: tasks.filter(
-        (t) => !t.completed && new Date(t.deadline) <= new Date()
-      ).length,
-    };
-  }, [tasks]);
+  const stats = useMemo(() => ({
+    total: tasks.length,
+    incomplete: tasks.filter(t => !t.completed).length,
+    completed: tasks.filter(t => t.completed).length,
+    overdue: tasks.filter(t => !t.completed && new Date(t.deadline) <= new Date()).length
+  }), [tasks]);
 
   const addTask = (taskData: Omit<Task, 'id' | 'completed' | 'completedAt'>) => {
     const newTask: Task = {
       id: `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       ...taskData,
       completed: false,
-      completedAt: null,
+      completedAt: null
     };
-
-    const uid = getSessionUid();
-    console.log('Adding task for user:', uid, JSON.stringify(newTask));
-    TaskService.upsertTask(uid!, newTask);
-    setTasks((prev) => [newTask, ...prev]);
+    if (!uid) return;
+    TaskService.upsertTask(uid, newTask);
+    setTasks(prev => [newTask, ...prev]);
   };
 
   const toggleComplete = (taskId: string) => {
-    setTasks((prev) =>
-      prev.map((task) =>
+    setTasks(prev => {
+      const updated = prev.map(task =>
         task.id === taskId
-          ? {
-              ...task,
-              completed: !task.completed,
-              completedAt: !task.completed ? new Date().toISOString() : null,
-            }
+          ? { ...task, completed: !task.completed, completedAt: !task.completed ? new Date().toISOString() : null }
           : task
-      )
-    );
+      );
+      if (uid) {
+        const toggledTask = updated.find(t => t.id === taskId);
+        if (toggledTask) TaskService.upsertTask(uid, toggledTask);
+      }
+      return updated;
+    });
   };
 
   const editTask = (editedTask: Task) => {
-    setTasks((prev) =>
-      prev.map((task) => (task.id === editedTask.id ? editedTask : task))
-    );
-    const uid = getSessionUid();
-    console.log('Update task for user:', uid, JSON.stringify(editedTask));
-    TaskService.upsertTask(uid!, editedTask);
+    setTasks(prev => prev.map(t => t.id === editedTask.id ? editedTask : t));
+    if (uid) TaskService.upsertTask(uid, editedTask);
   };
 
   const deleteTask = (taskId: string) => {
-    setTasks((prev) => prev.filter((task) => task.id !== taskId));
-    const uid = getSessionUid();
-    console.log('Delete task for user:', uid, taskId);
-    TaskService.deleteTask(uid!, taskId);
+    setTasks(prev => prev.filter(t => t.id !== taskId));
+    if (uid) TaskService.deleteTask(uid, taskId);
   };
 
   return (
-    <TasksContext.Provider value={{ tasks, sortedTasks, stats, addTask, toggleComplete, editTask, deleteTask }}>
+    <TasksContext.Provider value={{ tasks, sortedTasks, stats, setTasksFromLogin, addTask, toggleComplete, editTask, deleteTask }}>
       {children}
     </TasksContext.Provider>
   );
@@ -113,8 +109,6 @@ export const TasksProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 export const useTasks = (): TasksContextType => {
   const context = useContext(TasksContext);
-  if (!context) {
-    throw new Error('useTasks must be used within a TasksProvider');
-  }
+  if (!context) throw new Error('useTasks must be used within a TasksProvider');
   return context;
 };

@@ -1,3 +1,4 @@
+import { Task } from "@/interface/task";
 import { TaskRepo } from "./TaskRepo";
 export const TaskService = {
 
@@ -11,6 +12,9 @@ export const TaskService = {
 
     deleteTask : async (id : string, taskId : string) => {
         await TaskRepo.deleteTask(id, taskId);
-    }
+    },
+    listenTasks: async (uid: string, callback: (tasks: Task[]) => void): Promise<() => void> => {
+    return TaskRepo.listenTasks(uid, callback);
+  },
 
 }

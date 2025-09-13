@@ -7,10 +7,12 @@ import { LoginModel } from '@/module/auth/LoginModel';
 import { toast } from 'sonner';
 import { setSessionAuth } from '@/utils/storage';
 import { AppContext } from '@/contexts/app.context';
+import { useTasks } from '@/contexts/tasks.context';
 
 
 const Login = () => {
     const { setIsAuthenticated } = useContext(AppContext);
+    const { setTasksFromLogin } = useTasks(); // Moved to top level
     const navigate = useNavigate();
     const [ email, setEmail ] = useState( '' );
     const [ password, setPassword ] = useState( '' );
@@ -24,15 +26,17 @@ const Login = () => {
                     console.log( 'Login response:', JSON.stringify( response ) );
                     const { user} = response;
                     if ( user ) {
-                        const { uid} = user;
-                        setSessionAuth(uid );
+                        const { uid, email } = user;
+                        // Type assertion to include tasks or use an empty array as fallback
+                        setTasksFromLogin((user as any).tasks ?? []); // load tasks ngay
+                        setSessionAuth(uid , email || '' );
                         setIsAuthenticated( true );
                         toast.success( 'Login successful!' );
                     }
                     else{
                         toast.error( 'User data is missing in the response' );
                     }
-                    navigate("/taskmind");
+                    navigate("/");
                 } else {
                     toast.error( 'Login failed ');
                 }

@@ -53,9 +53,15 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) =
   };
 
   const handleDelete = useCallback(() => {
-    setIsDeleting(true);
-    setTimeout(() => onDelete(task.id), 300);
-  }, [task.id, onDelete]);
+    if (!task.completed) {
+      setIsDeleting(true);
+      setTimeout(() => onDelete(task.id), 300);
+    }
+  }, [task.id, task.completed, onDelete]);
+
+  const handleEdit = useCallback(() => {
+    if (!task.completed) onEdit(task);
+  }, [task, onEdit]);
 
   const energyConfig = getEnergyConfig(task.complexity);
   const priorityConfig = getPriorityConfig(task.priority); 
@@ -86,7 +92,6 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) =
           </h3>
 
           <div className="badges">
-            {/* Energy Badge */}
             <div
               className="energy-badge"
               style={{
@@ -100,7 +105,6 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) =
               <span className="energy-text">{task.complexity}</span>
             </div>
 
-            {/* Priority Badge */}
             <div
               className="priority-badge"
               style={{
@@ -143,15 +147,25 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) =
 
       {/* Nút thao tác */}
       <div className={`task-actions ${showActions ? "visible" : ""}`}>
-        <button className="action-btn edit-btn" onClick={() => onEdit(task)} title="Chỉnh sửa task">
+        <button
+          className="action-btn edit-btn"
+          onClick={handleEdit}
+          title={task.completed ? "Task đã hoàn thành, không thể chỉnh sửa" : "Chỉnh sửa task"}
+          disabled={task.completed}
+        >
           <span className="btn-icon">✏️</span>
         </button>
-        <button className="action-btn delete-btn" onClick={handleDelete} title="Xóa task">
+
+        <button
+          className="action-btn delete-btn"
+          onClick={handleDelete}
+          title={task.completed ? "Task đã hoàn thành, không thể xóa" : "Xóa task"}
+          disabled={task.completed}
+        >
           <span className="btn-icon">🗑️</span>
         </button>
       </div>
 
-      {/* Overlay hoàn thành */}
       {task.completed && (
         <div className="completion-overlay">
           <div className="completion-shine"></div>

@@ -6,6 +6,7 @@ import { Search, Plus, User, LogOut } from 'lucide-react';
 import TaskModal from './AddTask'; // Updated import to TaskModal
 import Modal from 'react-modal';
 import { useTasks } from '@/contexts/tasks.context';
+import { getSessionEmail } from '@/utils/storage';
 
 const TopBar = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -106,8 +107,8 @@ function UserMenu() {
 
     // Mock user data - replace with actual user data from context
     const user = {
-        name: 'Nguyen Van A',
-        email: 'nguyenvana@example.com'
+        name: 'GUEST',
+        email: getSessionEmail()
     };
 
     const logout = () => {

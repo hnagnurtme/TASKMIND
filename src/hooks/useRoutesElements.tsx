@@ -14,7 +14,7 @@ export default function useRoutesElements () {
     };
     const routeElements = useRoutes( [
         {
-            path: '/taskmind',
+            path: '/',
             element:
                 <ProtectedRoute>
                      <LayoutMain children={ <Home /> } />
@@ -22,15 +22,11 @@ export default function useRoutesElements () {
         },
         {
             path: '/login',
-            element: isAuthenticated ? <Navigate to='/taskmind' /> : <Login />,
+            element: isAuthenticated ? <Navigate to='/' /> : <Login />,
         },
         {
             path: '/register',
-            element: isAuthenticated ? <Navigate to='/taskmind' /> : <Register />,
-        },
-        {
-            path: '/',
-            element: <Navigate to='/taskmind' />,
+            element: isAuthenticated ? <Navigate to='/login' /> : <Register />,
         },
         { path: '*', element: <h1>404</h1> },
 

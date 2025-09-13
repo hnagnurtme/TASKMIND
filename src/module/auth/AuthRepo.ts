@@ -35,7 +35,7 @@ export class AuthRepo {
         return { success: false, message: "User profile not found" };
       }
 
-      return { success: true, user: { uid: user.uid, ...docSnap.data() } };
+      return { success: true, user: { uid: user.uid, email: user.email, ...docSnap.data() } };
     } catch (error) {
       console.error("Error logging in:", error);
       return { success: false, error };
