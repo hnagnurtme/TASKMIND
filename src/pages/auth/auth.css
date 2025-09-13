@@ -10,7 +10,13 @@
   position: relative;
   overflow: hidden;
 }
-
+.google-login-1{
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.2rem;
+}
 /* Overlay tối để chữ/form dễ nhìn hơn */
 .auth-container::before {
   content: '';

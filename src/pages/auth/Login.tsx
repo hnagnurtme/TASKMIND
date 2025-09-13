@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { setSessionAuth } from '@/utils/storage';
 import { AppContext } from '@/contexts/app.context';
 import { useTasks } from '@/contexts/tasks.context';
+import LoginWithGoogle from './LoginWithGoogle';
 
 
 const Login = () => {
@@ -27,8 +28,7 @@ const Login = () => {
                     const { user} = response;
                     if ( user ) {
                         const { uid, email } = user;
-                        // Type assertion to include tasks or use an empty array as fallback
-                        setTasksFromLogin((user as any).tasks ?? []); // load tasks ngay
+                        setTasksFromLogin((user as any).tasks ?? []); 
                         setSessionAuth(uid , email || '' );
                         setIsAuthenticated( true );
                         toast.success( 'Login successful!' );
@@ -54,7 +54,7 @@ const Login = () => {
             </video>
 
             <form onSubmit={ handleSubmit } className="auth-form">
-                <h2>Login</h2>
+                <h2>Task Mind</h2>
                 <label htmlFor="email">Email:</label>
                 <input
                     type="email"
@@ -71,6 +71,7 @@ const Login = () => {
                     onChange={ ( e ) => setPassword( e.target.value ) }
                     required
                 />
+                <LoginWithGoogle />
                 <button type="submit" className="auth-button">Login</button>
                 <p className="auth-switch">
                     Don't have an account? <Link to="/register">Register here</Link>

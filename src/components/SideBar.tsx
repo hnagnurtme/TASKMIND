@@ -125,9 +125,10 @@ const Sidebar = () => {
       role="complementary"
       aria-label="Application sidebar"
     >
-      <NavigationSection currentPath={pathname} />
+      <NavigationSection currentPath={pathname.replace('/home', '/dashboard')} />
       <ComplexityFiltersSection />
     </aside>
+    
   );
 };
 

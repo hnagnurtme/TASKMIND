@@ -5,6 +5,7 @@ import backwebm from '@/assets/backwebm.webm';
 import { toast } from 'sonner';
 import { AuthService } from '@/module/auth/AuthService';
 import { RegisterModel } from '@/module/auth/RegisterModel';
+import LoginWithGoogle from './LoginWithGoogle';
 const Register = () => {
     const navigate = useNavigate();
     const [name, setName] = useState('');
@@ -42,7 +43,7 @@ const Register = () => {
             </video>
 
             <form onSubmit={ handleSubmit } className="auth-form">
-                <h2>Register</h2>
+                <h2>Task Mind</h2>
 
                 <label htmlFor="name">Name:</label>
                 <input
@@ -79,7 +80,7 @@ const Register = () => {
                     onChange={ ( e ) => setConfirmPassword( e.target.value ) }
                     required
                 />
-
+                <LoginWithGoogle />
                 <button type="submit" className="auth-button">Register</button>
                 <p className="auth-switch">
                     Already have an account? <Link to="/login">Login here</Link>
