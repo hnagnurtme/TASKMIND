@@ -1,6 +1,7 @@
 import { TSidebarLinks } from '@/types/general.type';
 import { Link, useLocation } from 'react-router-dom';
 import { sidebarLinks } from '@/constants/general.const';
+import { useTasks } from '@/contexts/tasks.context';
 
 // ========================= INTERFACES =========================
 interface ISidebarLinkProps {
@@ -8,30 +9,24 @@ interface ISidebarLinkProps {
   isActive: boolean;
 }
 
-interface IEnergyFilter {
+interface IComplexityFilter {
   label: string;
   value: string;
   color: string;
 }
 
-interface IEnergyFilterButtonProps {
-  filter: IEnergyFilter;
+interface IComplexityFilterButtonProps {
+  filter: IComplexityFilter;
   onClick: (filterValue: string) => void;
 }
 
 // ========================= CONSTANTS =========================
-const ENERGY_FILTERS: IEnergyFilter[] = [
-  { label: 'High Energy', value: 'high', color: '#ef4444' },
-  { label: 'Medium Energy', value: 'medium', color: '#f59e0b' },
-  { label: 'Low Energy', value: 'low', color: '#10b981' }
+const COMPLEXITY_FILTERS: IComplexityFilter[] = [
+  { label: 'All', value: 'All', color: ''},
+  { label: 'High Complexity', value: 'high', color: '#ef4444' },
+  { label: 'Medium Complexity', value: 'medium', color: '#f59e0b' },
+  { label: 'Low Complexity', value: 'low', color: '#10b981' }
 ];
-
-// ========================= UTILITY FUNCTIONS =========================
-const handleEnergyFilterClick = (filterValue: string) => {
-  // TODO: Implement filter logic with state management
-  console.log(`Filter by ${filterValue} energy`);
-};
-
 
 // ========================= SUB COMPONENTS =========================
 function SidebarLink({ link, isActive }: ISidebarLinkProps) {
@@ -49,24 +44,24 @@ function SidebarLink({ link, isActive }: ISidebarLinkProps) {
   );
 }
 
-function EnergyFilterButton({ filter, onClick }: IEnergyFilterButtonProps) {
+function ComplexityFilterButton({ filter, onClick }: IComplexityFilterButtonProps) {
   return (
     <button
-      className="energy-filter-btn"
-      style={{ '--filter-color': filter.color } as React.CSSProperties}
+      className={`complexity-filter-btn complexity-filter-btn-${filter.value}`}
       onClick={() => onClick(filter.value)}
       aria-label={`Filter tasks by ${filter.label}`}
     >
-      <span 
-        className="energy-indicator"
-        style={{ backgroundColor: filter.color }}
-        aria-hidden="true"
-      />
+      {filter.color && (
+        <span 
+          className="complexity-indicator"
+          style={{ backgroundColor: filter.color }}
+          aria-hidden="true"
+        />
+      )}
       {filter.label}
     </button>
   );
 }
-
 
 function LogoutButton({ onLogout }: { onLogout: () => void }) {
   return (
@@ -98,23 +93,26 @@ function NavigationSection({ currentPath }: { currentPath: string }) {
   );
 }
 
-function EnergyFiltersSection() {
+function ComplexityFiltersSection() {
+  const { updateSelectedComplexity } = useTasks();
+
   return (
     <div className="sidebar-section">
       <h3 className="sidebar-section-title">Quick Filters</h3>
-      <div className="energy-filters" role="group" aria-label="Energy level filters">
-        {ENERGY_FILTERS.map((filter) => (
-          <EnergyFilterButton
+      <div className="complexity-filters" role="group" aria-label="Complexity level filters">
+        {COMPLEXITY_FILTERS.map((filter) => (
+          <ComplexityFilterButton
             key={filter.value}
             filter={filter}
-            onClick={handleEnergyFilterClick}
+            onClick={(value) =>
+              updateSelectedComplexity(value === 'All' ? null : value)
+            }
           />
         ))}
       </div>
     </div>
   );
 }
-
 
 // ========================= MAIN COMPONENT =========================
 const Sidebar = () => {
@@ -128,7 +126,7 @@ const Sidebar = () => {
       aria-label="Application sidebar"
     >
       <NavigationSection currentPath={pathname} />
-      <EnergyFiltersSection />
+      <ComplexityFiltersSection />
     </aside>
   );
 };
@@ -138,8 +136,8 @@ export default Sidebar;
 // ========================= EXPORTS FOR REUSE =========================
 export { 
   SidebarLink, 
-  EnergyFilterButton, 
+  ComplexityFilterButton, 
   LogoutButton,
   NavigationSection,
-  EnergyFiltersSection,
+  ComplexityFiltersSection,
 };

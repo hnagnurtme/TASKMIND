@@ -1,0 +1,65 @@
+/* Responsive Design */
+@media (max-width: 768px) {
+  .task-item {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .task-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .task-title {
+    font-size: 16px;
+  }
+
+  .energy-badge {
+    align-self: flex-start;
+  }
+
+  .task-actions {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .task-meta {
+    margin-bottom: 12px;
+  }
+
+  .deadline-info,
+  .task-note {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .task-item {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .checkbox {
+    width: 20px;
+    height: 20px;
+  }
+
+  .task-title {
+    font-size: 15px;
+  }
+
+  .energy-badge {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .action-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+}

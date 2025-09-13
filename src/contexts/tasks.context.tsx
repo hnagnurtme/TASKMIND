@@ -17,6 +17,8 @@ interface TasksContextType {
   toggleComplete: (taskId: string) => void;
   editTask: (editedTask: Task) => void;
   deleteTask: (taskId: string) => void;
+  updateSelectedComplexity: (complexity: string | null) => void;
+  filteredTasks: Task[];
 }
 
 const TasksContext = createContext<TasksContextType | undefined>(undefined);
@@ -24,6 +26,7 @@ const TasksContext = createContext<TasksContextType | undefined>(undefined);
 export const TasksProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [uid] = useState<string | null>(getSessionUid() ?? null);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [selectedComplexity, setSelectedComplexity] = useState<string | null>(null);
 
   // Load tasks realtime khi uid thay đổi
   useEffect(() => {
@@ -100,8 +103,28 @@ export const TasksProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (uid) TaskService.deleteTask(uid, taskId);
   };
 
+  const updateSelectedComplexity = (complexity: string | null) => {
+    setSelectedComplexity(complexity);
+  };
+
+  const filteredTasks = useMemo(() => {
+    if (!selectedComplexity) return tasks;
+    return tasks.filter(task => task.complexity === selectedComplexity);
+  }, [tasks, selectedComplexity]);
+
   return (
-    <TasksContext.Provider value={{ tasks, sortedTasks, stats, setTasksFromLogin, addTask, toggleComplete, editTask, deleteTask }}>
+    <TasksContext.Provider value={{
+      tasks,
+      sortedTasks,
+      stats,
+      setTasksFromLogin,
+      addTask,
+      toggleComplete,
+      editTask,
+      deleteTask,
+      updateSelectedComplexity,
+      filteredTasks
+    }}>
       {children}
     </TasksContext.Provider>
   );

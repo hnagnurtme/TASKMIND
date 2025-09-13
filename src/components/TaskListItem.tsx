@@ -9,9 +9,7 @@ import { Task } from '@/interface/task';
 // ----------------------------
 const TaskList: React.FC = () => {
   const {
-    tasks,
-    sortedTasks,
-    stats,
+    filteredTasks,
     addTask,
     toggleComplete,
     editTask,
@@ -33,15 +31,8 @@ const TaskList: React.FC = () => {
 
   return (
     <div className="task-list">
-      <TaskListHeader
-        taskCount={tasks.length}
-        onOpenAddModal={handleOpenAddModal}
-      />
-
-      <TaskStats stats={stats} />
-
       <TasksContainer
-        tasks={sortedTasks}
+        tasks={filteredTasks}
         onToggleComplete={toggleComplete}
         onEdit={handleOpenEditModal}
         onDelete={deleteTask}
@@ -70,25 +61,6 @@ const TaskList: React.FC = () => {
 };
 
 export default TaskList;
-
-// ----------------------------
-// Header
-// ----------------------------
-interface TaskListHeaderProps {
-  taskCount: number;
-  onOpenAddModal: () => void;
-}
-
-function TaskListHeader({ taskCount, onOpenAddModal }: TaskListHeaderProps) {
-  return (
-    <div className="task-list-header">
-      <h2 className="list-title">📋 Danh sách công việc ({taskCount})</h2>
-      <button className="add-task-btn" onClick={onOpenAddModal}>
-        ➕ Thêm task
-      </button>
-    </div>
-  );
-}
 
 // ----------------------------
 // Stats

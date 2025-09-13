@@ -6,6 +6,19 @@ import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import App from './App.tsx';
 import './index.css';
+import './css/utilities.css';
+import './css/dark-mode.css';
+import './css/print.css';
+import './css/layout.css';
+import './css/responsive.css';
+import './css/components/TaskItem.css';
+import './css/components/Button.css';
+import './css/components/Modal.css';
+import './css/components/Sidebar.css';
+import './css/components/TopBar.css';
+import './css/animations.css';
+import './css/reset.css';
+
 
 const queryClient = new QueryClient({
   defaultOptions: {

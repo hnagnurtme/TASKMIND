@@ -12,14 +12,14 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) =
   const [showActions, setShowActions] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const getEnergyConfig = (energy: string) => {
-    switch (energy) {
+  const getComplexityConfig = (complexity: string) => {
+    switch (complexity) {
       case "high":
-        return { color: "#ef4444", bgColor: "#fef2f2", icon: "⚡", label: "High Energy" };
+        return { color: "#ef4444", bgColor: "#fef2f2", icon: "⚡", label: "High Complexity" };
       case "medium":
-        return { color: "#f59e0b", bgColor: "#fffbeb", icon: "🔥", label: "Medium Energy" };
+        return { color: "#f59e0b", bgColor: "#fffbeb", icon: "🔥", label: "Medium Complexity" };
       case "low":
-        return { color: "#10b981", bgColor: "#f0fdf4", icon: "🌱", label: "Low Energy" };
+        return { color: "#10b981", bgColor: "#f0fdf4", icon: "🌱", label: "Low Complexity" };
       default:
         return { color: "#6b7280", bgColor: "#f9fafb", icon: "📌", label: "Unknown" };
     }
@@ -63,7 +63,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) =
     if (!task.completed) onEdit(task);
   }, [task, onEdit]);
 
-  const energyConfig = getEnergyConfig(task.complexity);
+  const complexityConfig = getComplexityConfig(task.complexity);
   const priorityConfig = getPriorityConfig(task.priority); 
   const deadlineInfo = formatDeadline(task.deadline);
 
@@ -93,16 +93,16 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete }: TaskItemProps) =
 
           <div className="badges">
             <div
-              className="energy-badge"
+              className="complexity-badge"
               style={{
-                color: energyConfig.color,
-                backgroundColor: energyConfig.bgColor,
-                borderColor: `${energyConfig.color}30`,
+                color: complexityConfig.color,
+                backgroundColor: complexityConfig.bgColor,
+                borderColor: `${complexityConfig.color}30`,
               }}
-              title={energyConfig.label}
+              title={complexityConfig.label}
             >
-              <span className="energy-icon">{energyConfig.icon}</span>
-              <span className="energy-text">{task.complexity}</span>
+              <span className="complexity-icon">{complexityConfig.icon}</span>
+              <span className="complexity-text">{task.complexity}</span>
             </div>
 
             <div
