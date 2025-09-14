@@ -65,7 +65,6 @@ const useAddTask = ({ onAddTask, onClose }: UseAddTaskProps) => {
     if (validateForm()) {
       const deadlineDate = new Date(formData.deadline);
       
-      // Double check for Invalid Date before submitting
       if (isNaN(deadlineDate.getTime())) {
         setErrors(prev => ({ ...prev, deadline: "Invalid time format" }));
         return;

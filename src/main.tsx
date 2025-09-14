@@ -19,6 +19,8 @@ import './css/components/TopBar.css';
 import './css/animations.css';
 import './css/reset.css';
 
+// seed fake data , i have firebase account : 
+// email : testuser@gmail.com pass: 123456
 
 const queryClient = new QueryClient({
   defaultOptions: {

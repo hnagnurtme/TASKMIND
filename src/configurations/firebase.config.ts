@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported } from "firebase/analytics";
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 const firebaseConfig = {
@@ -16,11 +16,19 @@ const app = initializeApp(firebaseConfig);
 
 console.log("Firebase app initialized:", JSON.stringify(app));
 
-const analytics = getAnalytics(app);
+
+let analytics: ReturnType<typeof getAnalytics> | undefined = undefined;
+if (typeof window !== "undefined") {
+  isSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(app);
+    }
+  });
+}
 
 const firestore = getFirestore(app);
 
 const auth = getAuth(app);
 
-export { auth, firestore as db , analytics };
+export { auth, firestore as db, analytics };
 

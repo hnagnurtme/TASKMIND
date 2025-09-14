@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "prepare": "husky",
     "commit": "cz",
-    "test": "echo \"No tests specified\" && exit 0"
+    "test": "echo \"No tests specified\" && exit 0",
+    "seed": "tsx seed.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
@@ -86,6 +87,7 @@
     "lint-staged": "^16.1.6",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.13",
+    "tsx": "^4.20.5",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.1",
     "vite": "^7.1.2"
