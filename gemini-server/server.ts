@@ -12,6 +12,11 @@ app.use(express.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK", timestamp: new Date().toISOString() });
+});
+
 app.post("/generate", async (req, res) => {
   try {
     const prompt: string = (req.body.prompt || "Xin chào Gemini!").slice(0, 200);
