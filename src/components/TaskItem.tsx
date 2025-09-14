@@ -45,7 +45,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, loading }: TaskIte
     
     // Check for Invalid Date
     if (isNaN(date.getTime())) {
-      return { text: "Ngày không hợp lệ", className: "invalid", urgent: false };
+      return { text: "Invalid date", className: "invalid", urgent: false };
     }
     
     const now = new Date();
@@ -57,10 +57,10 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, loading }: TaskIte
     const diffTime = dateOnly.getTime() - nowOnly.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays < 0) return { text: "Quá hạn", className: "overdue", urgent: true };
-    if (diffDays === 0) return { text: "Hôm nay", className: "today", urgent: true };
-    if (diffDays === 1) return { text: "Ngày mai", className: "tomorrow", urgent: true };
-    if (diffDays <= 7) return { text: `${diffDays} ngày`, className: "week", urgent: false };
+    if (diffDays < 0) return { text: "Overdue", className: "overdue", urgent: true };
+    if (diffDays === 0) return { text: "Today", className: "today", urgent: true };
+    if (diffDays === 1) return { text: "Tomorrow", className: "tomorrow", urgent: true };
+    if (diffDays <= 7) return { text: `${diffDays} days`, className: "week", urgent: false };
 
     return { text: date.toLocaleDateString("vi-VN"), className: "future", urgent: false };
   };
@@ -70,7 +70,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, loading }: TaskIte
     
     // Check for Invalid Date
     if (isNaN(date.getTime())) {
-      return "Thời gian không hợp lệ";
+      return "Invalid time";
     }
     
     // Format to local time instead of UTC
@@ -109,7 +109,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, loading }: TaskIte
         <button
           className={`checkbox ${task.completed ? "checked" : ""}`}
           onClick={() => onToggleComplete(task.id)}
-          aria-label={task.completed ? "Bỏ hoàn thành" : "Đánh dấu hoàn thành"}
+          aria-label={task.completed ? "Mark as incomplete" : "Mark as complete"}
         >
           {task.completed && <span className="checkmark">✓</span>}
         </button>
@@ -170,7 +170,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, loading }: TaskIte
           <div className="completion-info">
             <span className="completion-icon">✅</span>
             <span className="completion-text">
-              Hoàn thành lúc {formatDateTime(task.completedAt)}
+              Completed at {formatDateTime(task.completedAt)}
             </span>
           </div>
         )}
@@ -181,7 +181,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, loading }: TaskIte
         <button
           className="action-btn edit-btn"
           onClick={handleEdit}
-          title={task.completed ? "Task đã hoàn thành, không thể chỉnh sửa" : "Chỉnh sửa task"}
+          title={task.completed ? "Task is completed, cannot edit" : "Edit task"}
           disabled={task.completed}
         >
           <span className="btn-icon">✏️</span>
@@ -190,7 +190,7 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, loading }: TaskIte
         <button
           className="action-btn delete-btn"
           onClick={handleDelete}
-          title={task.completed ? "Task đã hoàn thành, không thể xóa" : "Xóa task"}
+          title={task.completed ? "Task is completed, cannot delete" : "Delete task"}
           disabled={task.completed}
         >
           <span className="btn-icon">🗑️</span>

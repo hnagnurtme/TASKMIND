@@ -16,16 +16,16 @@ interface TaskDataPoint {
   isCompleted: boolean;
 }
 
-const VALUE_SCALE_LABELS = ["Low Value", "Medium Value", "High Value"];
-const COMPLEXITY_SCALE_LABELS = ["Low Complexity", "Medium Complexity", "High Complexity"];
+const VALUE_SCALE_LABELS = ["Low", "Medium", "High"];
+const COMPLEXITY_SCALE_LABELS = ["Low", "Medium", "High"];
 
 // Màu sắc theo trạng thái
 const STATUS_COLORS = {
-  completed: "#10b981",    // Xanh lá - Đã hoàn thành
-  pending: "#3b82f6",      // Xanh dương - Đang chờ (chưa quá hạn)
-  overdue: "#ef4444",      // Đỏ - Quá hạn
-  progress: "#f59e0b",     // Vàng cam - Đang làm (có thể thêm logic sau)
-  default: "#64748b"       // Xám - Mặc định
+  completed: "#10b981",    // Green - Completed
+  pending: "#3b82f6",      // Blue - Pending (not overdue yet)
+  overdue: "#ef4444",      // Red - Overdue
+  progress: "#f59e0b",     // Orange - In Progress (might be added later)
+  default: "#64748b"       // Gray - Default
 } as const;
 
 const ValueComplexityMatrix: React.FC = () => {
@@ -73,14 +73,14 @@ const ValueComplexityMatrix: React.FC = () => {
       // Xác định trạng thái task dựa trên completed và deadline
       const currentDate = new Date();
       const deadlineDate = new Date(t.deadline);
-      let taskStatus = 'pending'; // Mặc định là đang chờ
+      let taskStatus = 'pending'; // Default is pending
       
       if (t.completed) {
-        taskStatus = 'completed'; // Đã hoàn thành
+        taskStatus = 'completed'; // Completed
       } else if (deadlineDate < currentDate) {
-        taskStatus = 'overdue'; // Quá hạn
+        taskStatus = 'overdue'; // Overdue
       } else {
-        taskStatus = 'pending'; // Còn hạn, đang chờ làm
+        taskStatus = 'pending'; // Still in time, pending
       }
       
       return {
@@ -116,9 +116,9 @@ const ValueComplexityMatrix: React.FC = () => {
 
     // Status labels
     const statusLabels = {
-      completed: 'HOÀN THÀNH',
-      pending: 'ĐANG CHỜ',
-      overdue: 'QUÁ HẠN'
+      completed: 'COMPLETED',
+      pending: 'PENDING',
+      overdue: 'OVERDUE'
     };
 
     return (
@@ -201,21 +201,21 @@ const ValueComplexityMatrix: React.FC = () => {
                   className="value-complexity-matrix__legend-color"
                   style={{ backgroundColor: STATUS_COLORS.completed }}
                 />
-                <span>Hoàn thành</span>
+                <span>Completed</span>
               </div>
               <div className="value-complexity-matrix__legend-item">
                 <div 
                   className="value-complexity-matrix__legend-color"
                   style={{ backgroundColor: STATUS_COLORS.pending }}
                 />
-                <span>Đang chờ</span>
+                <span>Pending</span>
               </div>
               <div className="value-complexity-matrix__legend-item">
                 <div 
                   className="value-complexity-matrix__legend-color"
                   style={{ backgroundColor: STATUS_COLORS.overdue }}
                 />
-                <span>Quá hạn</span>
+                <span>Overdue</span>
               </div>
             </div>
           </div>

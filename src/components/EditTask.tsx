@@ -23,12 +23,12 @@ const EditTask: React.FC<EditTaskProps> = ({ isOpen, task, onClose, onSave }) =>
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h2>✏️ Chỉnh sửa công việc</h2>
+        <h2>✏️ Edit Task</h2>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Tên công việc"
+          placeholder="Task Name"
         />
         <input
           type="date"
@@ -36,8 +36,8 @@ const EditTask: React.FC<EditTaskProps> = ({ isOpen, task, onClose, onSave }) =>
           onChange={(e) => setDeadline(e.target.value)}
         />
         <div className="modal-actions">
-          <button onClick={handleSave}>Lưu</button>
-          <button onClick={onClose}>Hủy</button>
+          <button onClick={handleSave}>Save</button>
+          <button onClick={onClose}>Cancel</button>
         </div>
       </div>
     </div>

@@ -5,11 +5,11 @@ import { doc, setDoc, getDoc, } from "firebase/firestore";
 export class AuthRepo {
   static async register(email: string, password: string, name: string) {
     try {
-      // Đăng ký user bằng Firebase Auth
+      // Register user with Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Lưu thông tin user profile vào Firestore
+      // Save user profile information to Firestore
       await setDoc(doc(db, "users", user.uid), {
         email,
         name,
@@ -25,11 +25,11 @@ export class AuthRepo {
 
   static async login(email: string, password: string) {
     try {
-      // Login qua Firebase Auth
+      // Login via Firebase Auth
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Lấy profile từ Firestore
+      // Get profile from Firestore
       const docSnap = await getDoc(doc(db, "users", user.uid));
       if (!docSnap.exists()) {
         return { success: false, message: "User profile not found" };

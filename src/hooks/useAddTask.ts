@@ -33,17 +33,17 @@ const useAddTask = ({ onAddTask, onClose }: UseAddTaskProps) => {
     const newErrors = { title: "", deadline: "" };
 
     if (!formData.title.trim()) {
-      newErrors.title = "Tên task không được để trống";
+      newErrors.title = "Task name cannot be empty";
     }
 
     if (!formData.deadline) {
-      newErrors.deadline = "Deadline không được để trống";
+      newErrors.deadline = "Deadline cannot be empty";
     } else {
       const deadlineDate = new Date(formData.deadline);
       
       // Check for Invalid Date
       if (isNaN(deadlineDate.getTime())) {
-        newErrors.deadline = "Định dạng thời gian không hợp lệ";
+        newErrors.deadline = "Invalid time format";
       } else {
         // Compare only dates, not time
         const now = new Date();
@@ -51,7 +51,7 @@ const useAddTask = ({ onAddTask, onClose }: UseAddTaskProps) => {
         const deadlineOnly = new Date(deadlineDate.getFullYear(), deadlineDate.getMonth(), deadlineDate.getDate());
         
         if (deadlineOnly < nowOnly) {
-          newErrors.deadline = "Deadline không thể là ngày trong quá khứ";
+          newErrors.deadline = "Deadline cannot be in the past";
         }
       }
     }
@@ -67,7 +67,7 @@ const useAddTask = ({ onAddTask, onClose }: UseAddTaskProps) => {
       
       // Double check for Invalid Date before submitting
       if (isNaN(deadlineDate.getTime())) {
-        setErrors(prev => ({ ...prev, deadline: "Định dạng thời gian không hợp lệ" }));
+        setErrors(prev => ({ ...prev, deadline: "Invalid time format" }));
         return;
       }
 

@@ -31,15 +31,15 @@ const TaskStats: React.FC<TaskStatsProps> = ({
             )}
             <div className="stat-item">
                 <span className="stat-number">{stats.incomplete}</span>
-                <span className="stat-label-incomplete">Chưa hoàn thành</span>
+                <span className="stat-label-incomplete">Incomplete</span>
             </div>
             <div className="stat-item">
                 <span className="stat-number">{stats.completed}</span>
-                <span className="stat-label-complete">Đã hoàn thành</span>
+                <span className="stat-label-complete">Completed</span>
             </div>
             <div className="stat-item">
                 <span className="stat-number">{stats.overdue}</span>
-                <span className="stat-label-duedate">Quá hạn</span>
+                <span className="stat-label-duedate">Overdue</span>
             </div>
         </div>
     );

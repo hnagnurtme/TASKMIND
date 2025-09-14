@@ -7,7 +7,7 @@ export class TaskRepo {
   private static tasksCache: Record<string, Task[]> = {};
   private static unsubscribers: Record<string, () => void> = {};
 
-  /** Lấy tất cả tasks */
+  /** Get all tasks */
   static async getAllTasks(uid: string): Promise<Task[]> {
     if (this.tasksCache[uid]) return this.tasksCache[uid];
 
@@ -22,7 +22,7 @@ export class TaskRepo {
     return [];
   }
 
-  /** Ngừng lắng nghe realtime */
+  /** Stop listening to realtime updates */
   static unsubscribe(uid: string) {
     if (this.unsubscribers[uid]) {
       this.unsubscribers[uid]();
@@ -30,7 +30,7 @@ export class TaskRepo {
     }
   }
 
-  /** Thêm hoặc cập nhật task */
+  /** Add or update task */
   static async upsertTask(uid: string, task: Task): Promise<boolean> {
     try {
       const tasks = this.tasksCache[uid] || [];
@@ -47,7 +47,7 @@ export class TaskRepo {
     }
   }
 
-  /** Xóa task */
+  /** Delete task */
   static async deleteTask(uid: string, taskId: string): Promise<boolean> {
     try {
       const tasks = this.tasksCache[uid] || [];
@@ -63,9 +63,9 @@ export class TaskRepo {
     }
   }
 
-  /** Lắng nghe realtime tasks */
+  /** Listen to realtime tasks */
   static listenTasks(uid: string, callback: (tasks: Task[]) => void): () => void {
-    if (this.unsubscribers[uid]) return this.unsubscribers[uid]; // đã có listener
+    if (this.unsubscribers[uid]) return this.unsubscribers[uid]; // already has listener
 
     const userRef = doc(db, "users", uid);
     const unsubscribe = onSnapshot(userRef, (snap) => {

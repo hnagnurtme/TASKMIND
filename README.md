@@ -1,54 +1,54 @@
 # TASK MIND
 
-**Quản lý thời gian dựa trên mức năng lượng cá nhân**
+**Time management based on personal energy levels**
 
-## 🌟 Giới thiệu
+## 🌟 Introduction
 
-Sinh viên thường phải đối mặt với hàng tá deadline, task, và bài tập nhóm. Nhưng không phải lúc nào cũng có cùng mức năng lượng: có lúc tỉnh táo, có lúc mệt rũ. **Energy-Aware Planner** giúp bạn:
+Students often face numerous deadlines, tasks, and group projects. However, energy levels aren't always consistent: sometimes alert, sometimes exhausted. **Energy-Aware Planner** helps you:
 
-- Tạo và quản lý công việc với **Energy Level** (High / Medium / Low)
-- Chọn task phù hợp với trạng thái năng lượng hiện tại
-- Xem deadline trên **Calendar View** để tránh trễ hạn
-- Theo dõi **Analytics View** để biết thói quen làm việc của bản thân
+- Create and manage tasks with **Energy Level** (High / Medium / Low)
+- Choose tasks that match your current energy state
+- View deadlines on **Calendar View** to avoid being late
+- Track **Analytics View** to understand your work habits
 
-Ứng dụng được xây dựng bằng **React + Firebase Firestore**, hỗ trợ realtime sync và đa thiết bị.
+The application is built with **React + Firebase Firestore**, supporting realtime sync and multi-device usage.
 
-## ⚡ Tính năng chính
+## ⚡ Key Features
 
-- **CRUD Task:** tạo, đọc, cập nhật, xóa
-- **Persistent storage:** lưu trữ trên Firestore
+- **CRUD Tasks:** create, read, update, delete
+- **Persistent storage:** stored on Firestore
 - **3 views:**
-  1. **List View:** danh sách task, filter theo energy
-  2. **Calendar View:** task hiển thị trên lịch
-  3. **Analytics View:** biểu đồ phân tích thói quen làm việc
-- **Time handling:** deadline, completedAt, thống kê thời gian
-- **20+ items:** filter + search để quản lý nhiều task
+  1. **List View:** task list, filter by energy
+  2. **Calendar View:** tasks displayed on calendar
+  3. **Analytics View:** charts analyzing work habits
+- **Time handling:** deadline, completedAt, time statistics
+- **20+ items:** filter + search to manage many tasks
 
-## 🖼️ Layout mô tả
+## 🖼️ Layout Description
 
 ### Topbar
 - Logo: `"TASK MIND"`
-- Search bar: tìm task theo tên
-- User menu (tùy chọn đăng nhập bằng Google nếu có)
-- Nút `+ Add Task` (mở modal tạo task mới)
+- Search bar: find task by name
+- User menu (optional Google login if available)
+- `+ Add Task` button (opens modal to create new task)
 
 ### Sidebar
 - Navigation menu:
   - 📝 **Tasks** (List View)
-  - 📅 **Calendar** (Calendar View)
+  - 📅 **Calendar** (Calendar View)  
   - 📊 **Analytics** (Analytics View)
-- Bộ lọc nhanh:
+- Quick filters:
   - High Energy
   - Medium Energy
   - Low Energy
-- Logout button (nếu có auth)
+- Logout button (if auth enabled)
 
 ### Main Content
-- **List View:** table/list các task, checkbox completed, edit/delete
-- **Calendar View:** calendar component, show task theo deadline
+- **List View:** table/list of tasks, checkbox completed, edit/delete
+- **Calendar View:** calendar component, show tasks by deadline
 - **Analytics View:**
-  - Pie chart: phân bố task theo energy-level
-  - Bar chart: số task hoàn thành theo ngày/giờ
+  - Pie chart: task distribution by energy-level
+  - Bar chart: completed tasks by day/hour
 
 ## 🗄️ Firestore Schema
 

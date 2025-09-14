@@ -15,9 +15,9 @@ const getComplexityColor = (complexity: string) => {
 
 const getComplexityLabel = (complexity: string) => {
   switch (complexity) {
-    case "high": return "🔥 Khó";      // Fire for difficulty
-    case "medium": return "⚡ Vừa";    // Lightning for moderate  
-    case "low": return "🌱 Dễ";        // Plant for simple
+    case "high": return "🔥 Hard";      // Fire for difficulty
+    case "medium": return "⚡ Medium";  // Lightning for moderate  
+    case "low": return "🌱 Easy";       // Plant for simple
     default: return "";
   }
 };
@@ -33,9 +33,9 @@ const getValueColor = (value: string) => {
 
 const getValueLabel = (value: string) => {
   switch (value) {
-    case "high": return "💎 Cao";      // Diamond for high value
-    case "medium": return "🎯 Vừa";    // Target for medium value
-    case "low": return "📝 Thấp";      // Note for low value
+    case "high": return "💎 High";      // Diamond for high value
+    case "medium": return "🎯 Medium";  // Target for medium value
+    case "low": return "📝 Low";        // Note for low value
     default: return "";
   }
 };
@@ -56,7 +56,7 @@ const ComplexitySelector: React.FC<{
   onChange: (complexity: string) => void;
 }> = ({ selectedComplexity, onChange }) => (
   <div className="task-modal-field-group">
-    <label className="task-modal-field-label">🏷️ Độ phức tạp</label>
+    <label className="task-modal-field-label">🏷️ Complexity Level</label>
     <div className="task-modal-complexity-grid">
       {(["high", "medium", "low"] as const).map((level) => (
         <label
@@ -89,7 +89,7 @@ const ValueSelector: React.FC<{
   onChange: (value: string) => void;
 }> = ({ selectedValue, onChange }) => (
   <div className="task-modal-field-group">
-    <label className="task-modal-field-label">⭐ Giá trị công việc</label>
+    <label className="task-modal-field-label">⭐ Task Value</label>
     <div className="task-modal-value-grid">
       {(["high", "medium", "low"] as const).map((level) => (
         <label
@@ -176,7 +176,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSubmit, taskTo
       <div className="task-modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="task-modal-header">
           <h2 className="task-modal-title">
-            {taskToEdit ? "Chỉnh sửa công việc" : "Tạo công việc mới"}
+            {taskToEdit ? "Edit Task" : "Create New Task"}
           </h2>
           <button className="task-modal-close-btn" onClick={handleClose}>×</button>
         </div>
@@ -184,14 +184,14 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSubmit, taskTo
         <form onSubmit={handleCustomSubmit} className="task-modal-form">
           {/* Title */}
           <div className="task-modal-field-group">
-            <label htmlFor="title" className="task-modal-field-label">📋 Tên công việc *</label>
+            <label htmlFor="title" className="task-modal-field-label">📋 Task Name *</label>
             <input
               type="text"
               id="title"
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              placeholder="💡 Ví dụ: Hoàn thành báo cáo AI..."
+              placeholder="💡 Example: Complete AI report..."
               className={`task-modal-input ${errors.title ? "task-modal-input-error" : ""}`}
               maxLength={100}
             />
@@ -200,7 +200,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSubmit, taskTo
 
           {/* Deadline */}
           <div className="task-modal-field-group">
-            <label htmlFor="deadline" className="task-modal-field-label">⏰ Thời hạn hoàn thành *</label>
+            <label htmlFor="deadline" className="task-modal-field-label">⏰ Completion Deadline *</label>
             <input
               type="datetime-local"
               id="deadline"
@@ -230,13 +230,13 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSubmit, taskTo
 
           {/* Note */}
           <div className="task-modal-field-group">
-            <label htmlFor="note" className="task-modal-field-label">📝 Ghi chú thêm</label>
+            <label htmlFor="note" className="task-modal-field-label">📝 Additional Notes</label>
             <textarea
               id="note"
               name="note"
               value={formData.note}
               onChange={handleInputChange}
-              placeholder="💭 Thêm mô tả chi tiết cho công việc này..."
+              placeholder="💭 Add detailed description for this task..."
               className="task-modal-textarea"
               rows={3}
               maxLength={300}
@@ -247,10 +247,10 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSubmit, taskTo
           {/* Footer */}
           <div className="task-modal-footer">
             <button type="button" onClick={handleClose} className="task-modal-btn-secondary">
-              ❌ Huỷ bỏ
+              ❌ Cancel
             </button>
             <button type="submit" className="task-modal-btn-primary">
-              {taskToEdit ? "💾 Cập nhật" : "✨ Tạo mới"}
+              {taskToEdit ? "💾 Update" : "✨ Create"}
             </button>
           </div>
         </form>

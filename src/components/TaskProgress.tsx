@@ -3,9 +3,9 @@ import React from "react";
 
 interface TaskProgressProps {
   completionPercent: number; // 0 - 100
-  size?: number; // chiều cao thanh, default 8px
-  filledColor?: string; // màu phần đã hoàn thành
-  emptyColor?: string; // màu phần chưa hoàn thành
+  size?: number; // bar height, default 8px
+  filledColor?: string; // color for completed portion
+  emptyColor?: string; // color for remaining portion
 }
 
 const TaskProgress: React.FC<TaskProgressProps> = ({
@@ -19,7 +19,7 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-      {/* Thanh tiến độ */}
+      {/* Progress bar */}
       <div
         style={{
           width: "100%",
@@ -39,9 +39,9 @@ const TaskProgress: React.FC<TaskProgressProps> = ({
         />
       </div>
 
-      {/* % hoàn thành */}
+      {/* Completion percentage */}
       <div style={{ fontSize: 12, color: "#374151", textAlign: "right" }}>
-        {clampedPercent}% hoàn thành
+        {clampedPercent}% completed
       </div>
     </div>
   );

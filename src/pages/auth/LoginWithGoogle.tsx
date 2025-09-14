@@ -46,7 +46,7 @@ function LoginWithGoogle () {
 
             const tasks = userDoc.exists() ? userDoc.data().tasks ?? [] : []
 
-            // Cập nhật context và session
+            // Update context and session
             setTasksFromLogin( tasks )
             setSessionAuth( uid, email || '' )
             setIsAuthenticated( true )
