@@ -7,8 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies including dev dependencies for build
-RUN npm ci
-
+RUN npm ci --legacy-peer-deps
 # Copy TypeScript and Vite config files first
 COPY tsconfig*.json ./
 COPY vite.config.ts ./

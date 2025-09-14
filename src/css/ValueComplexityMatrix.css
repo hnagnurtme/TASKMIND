@@ -1,0 +1,597 @@
+/* Modern Value Complexity Matrix Styles */
+.value-complexity-matrix {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 28px;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  padding: 36px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.value-complexity-matrix::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, 
+    #ef4444 0%,    /* Red - High Priority */
+    #f59e0b 25%,   /* Amber - Medium Priority */
+    #10b981 50%,   /* Emerald - Done */
+    #3b82f6 75%,   /* Blue - Default */
+    #8b5cf6 100%   /* Purple - Special */
+  );
+  border-radius: 28px 28px 0 0;
+}
+
+.value-complexity-matrix::after {
+  content: '';
+  position: absolute;
+  bottom: -40%;
+  right: -40%;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  50% { transform: translate(-5px, -5px) scale(1.05); opacity: 0.4; }
+}
+
+.value-complexity-matrix:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.12),
+    0 12px 20px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Header Section */
+.value-complexity-matrix__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.value-complexity-matrix__title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.04em;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.value-complexity-matrix__title-icon {
+  font-size: 28px;
+  animation: rotate 3s linear infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Legend Styles */
+.value-complexity-matrix__legend {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.value-complexity-matrix__legend-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(248, 250, 252, 0.9);
+  padding: 16px 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.value-complexity-matrix__legend-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 4px;
+}
+
+.value-complexity-matrix__legend-items {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.value-complexity-matrix__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: capitalize;
+}
+
+.value-complexity-matrix__legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+}
+
+.value-complexity-matrix__legend-color:hover {
+  transform: scale(1.3);
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.value-complexity-matrix__legend-size {
+  border-radius: 50%;
+  background: #64748b;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.value-complexity-matrix__legend-size--small {
+  width: 12px;
+  height: 12px;
+}
+
+.value-complexity-matrix__legend-size--medium {
+  width: 16px;
+  height: 16px;
+}
+
+.value-complexity-matrix__legend-size--large {
+  width: 20px;
+  height: 20px;
+}
+
+.value-complexity-matrix__legend-size:hover {
+  transform: scale(1.3);
+}
+
+/* Chart Wrapper */
+.value-complexity-matrix__chart-wrapper {
+  position: relative;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid rgba(226, 232, 240, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+/* Custom Dot Styles */
+.value-complexity-dot {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.value-complexity-dot:hover {
+  transform: scale(1.4);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)) brightness(1.1);
+}
+
+/* Quadrant Labels */
+.value-complexity-quadrant {
+  position: absolute;
+  pointer-events: none; /* Quan trọng: không can thiệp vào click events */
+  z-index: 1; /* Giảm z-index để không che khuất tooltip */
+  opacity: 1; /* Đảm bảo hiển thị mặc định */
+  transition: opacity 0.3s ease;
+}
+
+.value-complexity-quadrant__label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.9); /* Tăng opacity để dễ nhìn hơn */
+  padding: 10px 14px; /* Tăng padding một chút */
+  border-radius: 12px;
+  box-shadow: 
+    0 6px 16px rgba(0, 0, 0, 0.08), /* Tăng shadow để nổi bật hơn */
+    0 3px 6px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+/* Chỉ làm mờ nhẹ khi hover vào chart area */
+.value-complexity-matrix__chart-wrapper:hover .value-complexity-quadrant {
+  opacity: 0.7; /* Chỉ làm mờ nhẹ, không quá nhiều */
+}
+
+/* Chỉ ẩn khi có tooltip active và không dùng :has() selector phức tạp */
+.value-complexity-matrix--tooltip-active .value-complexity-quadrant {
+  opacity: 0.2; /* Chỉ làm mờ thay vì ẩn hoàn toàn */
+}
+
+.value-complexity-quadrant__icon {
+  font-size: 18px; /* Tăng size icon */
+  line-height: 1;
+}
+
+.value-complexity-quadrant__text {
+  font-size: 13px; /* Tăng font size */
+  font-weight: 700; /* Tăng font weight để dễ đọc hơn */
+  color: #1e293b;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8); /* Thêm text shadow để dễ đọc */
+}
+
+.value-complexity-quadrant small {
+  font-size: 11px; /* Tăng font size */
+  color: #64748b;
+  font-weight: 500; /* Tăng font weight */
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8); /* Thêm text shadow */
+}
+
+/* Quadrant Positioning - Di chuyển xa khỏi các trục để không bị che */
+.value-complexity-quadrant--quick-wins {
+  top: 60px; /* Đưa xuống xa khỏi trục trên */
+  left: 80px; /* Đưa ra xa khỏi trục Y bên trái */
+}
+
+.value-complexity-quadrant--quick-wins .value-complexity-quadrant__label {
+  background: linear-gradient(135deg, rgba(236, 253, 245, 0.95) 0%, rgba(209, 250, 229, 0.95) 100%);
+  border-color: rgba(16, 185, 129, 0.4);
+  border-width: 2px;
+}
+
+.value-complexity-quadrant--major-projects {
+  top: 60px; /* Đưa xuống xa khỏi trục trên */
+  right: 50px; /* Đưa ra xa khỏi edge bên phải */
+}
+
+.value-complexity-quadrant--major-projects .value-complexity-quadrant__label {
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.95) 0%, rgba(219, 234, 254, 0.95) 100%);
+  border-color: rgba(59, 130, 246, 0.4);
+  border-width: 2px;
+}
+
+.value-complexity-quadrant--fill-ins {
+  bottom: 80px; /* Đưa lên xa khỏi trục X dưới */
+  left: 80px; /* Đưa ra xa khỏi trục Y bên trái */
+}
+
+.value-complexity-quadrant--fill-ins .value-complexity-quadrant__label {
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(226, 232, 240, 0.95) 100%);
+  border-color: rgba(100, 116, 139, 0.4);
+  border-width: 2px;
+}
+
+.value-complexity-quadrant--thankless-tasks {
+  bottom: 80px; /* Đưa lên xa khỏi trục X dưới */
+  right: 50px; /* Đưa ra xa khỏi edge bên phải */
+}
+
+.value-complexity-quadrant--thankless-tasks .value-complexity-quadrant__label {
+  background: linear-gradient(135deg, rgba(254, 242, 242, 0.95) 0%, rgba(254, 202, 202, 0.95) 100%);
+  border-color: rgba(239, 68, 68, 0.4);
+  border-width: 2px;
+}
+
+/* Custom Tooltip Styles */
+.value-complexity-tooltip {
+  background: rgba(255, 255, 255, 0.98);
+  border: none;
+  border-radius: 20px;
+  padding: 20px 24px;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.15),
+    0 10px 20px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(20px);
+  font-family: 'Inter', sans-serif;
+  min-width: 260px;
+  max-width: 320px;
+  transform: translateY(-10px);
+  z-index: 9999; /* Cao nhất để không bị che khuất */
+  position: relative;
+}
+
+/* Đảm bảo recharts tooltip wrapper có z-index cao */
+.recharts-tooltip-wrapper {
+  z-index: 9999 !important;
+}
+
+.value-complexity-tooltip__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e2e8f0;
+  gap: 12px;
+}
+
+.value-complexity-tooltip__title {
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.3;
+  flex: 1;
+  word-break: break-word;
+}
+
+.value-complexity-tooltip__status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  border: 1px solid;
+}
+
+.value-complexity-tooltip__status--completed {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  color: #059669;
+  border-color: #6ee7b7;
+}
+
+.value-complexity-tooltip__status--pending {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  color: #2563eb;
+  border-color: #93c5fd;
+}
+
+.value-complexity-tooltip__status--overdue {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+.value-complexity-tooltip__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.value-complexity-tooltip__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.value-complexity-tooltip__label {
+  font-weight: 600;
+  color: #64748b;
+}
+
+.value-complexity-tooltip__value {
+  font-weight: 700;
+  color: #1e293b;
+  text-align: right;
+}
+
+.value-complexity-tooltip__priority {
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.value-complexity-tooltip__priority--low {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: #475569;
+}
+
+.value-complexity-tooltip__priority--medium {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  color: #d97706;
+}
+
+.value-complexity-tooltip__priority--high {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  color: #dc2626;
+}
+
+/* Custom Dot Styles - Tăng z-index cho các dots */
+.value-complexity-dot {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  z-index: 100; /* Cao hơn quadrant labels */
+}
+
+.value-complexity-dot:hover {
+  transform: scale(1.4);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)) brightness(1.1);
+  z-index: 200; /* Còn cao hơn nữa khi hover */
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .value-complexity-matrix {
+    padding: 24px;
+    border-radius: 20px;
+  }
+  
+  .value-complexity-matrix__header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+  
+  .value-complexity-matrix__legend {
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  /* Giữ quadrant labels nhưng làm nhỏ lại */
+  .value-complexity-quadrant__label {
+    padding: 6px 10px;
+  }
+  
+  .value-complexity-quadrant__text {
+    font-size: 11px;
+  }
+  
+  .value-complexity-quadrant small {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 768px) {
+  .value-complexity-matrix {
+    padding: 20px;
+    border-radius: 16px;
+  }
+  
+  .value-complexity-matrix__title {
+    font-size: 20px;
+    justify-content: center;
+  }
+  
+  .value-complexity-matrix__chart-wrapper {
+    padding: 16px;
+    border-radius: 16px;
+  }
+  
+  .value-complexity-tooltip {
+    min-width: 220px;
+    padding: 16px 20px;
+  }
+  
+  .value-complexity-tooltip__title {
+    font-size: 14px;
+  }
+  
+  /* Ẩn quadrant labels trên tablet */
+  .value-complexity-quadrant {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .value-complexity-matrix__legend {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .value-complexity-matrix__legend-group {
+    padding: 12px 16px;
+  }
+  
+  .value-complexity-matrix__legend-items {
+    justify-content: center;
+  }
+}
+
+/* Legacy compatibility styles */
+.matrix-container {
+  /* Legacy support - use same styles as new component */
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 28px;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  padding: 36px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.matrix-label {
+  /* Legacy quadrant labels - hidden in favor of new design */
+  display: none;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .value-complexity-matrix {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-color: rgba(71, 85, 105, 0.8);
+  }
+  
+  .value-complexity-matrix__title {
+    background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .value-complexity-matrix__legend-group {
+    background: rgba(30, 41, 59, 0.9);
+    border-color: rgba(71, 85, 105, 0.8);
+  }
+  
+  .value-complexity-matrix__legend-title {
+    color: #cbd5e1;
+  }
+  
+  .value-complexity-matrix__legend-item {
+    color: #94a3b8;
+  }
+  
+  .value-complexity-matrix__chart-wrapper {
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(71, 85, 105, 0.5);
+  }
+  
+  .value-complexity-tooltip {
+    background: rgba(30, 41, 59, 0.98);
+    color: #f8fafc;
+  }
+  
+  .value-complexity-tooltip__title {
+    color: #f8fafc;
+  }
+  
+  .value-complexity-tooltip__header {
+    border-color: #475569;
+  }
+  
+  .value-complexity-tooltip__label {
+    color: #94a3b8;
+  }
+  
+  .value-complexity-tooltip__value {
+    color: #f1f5f9;
+  }
+}
