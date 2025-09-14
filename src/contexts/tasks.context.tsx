@@ -18,7 +18,11 @@ interface TasksContextType {
   editTask: (editedTask: Task) => void;
   deleteTask: (taskId: string) => void;
   updateSelectedComplexity: (complexity: string | null) => void;
+  updateSelectedPriority: (priority: string | null) => void;
   filteredTasks: Task[];
+  // new: search term and setter for in-context search
+  searchTerm: string;
+  updateSearchTerm: (term: string) => void;
 }
 
 const TasksContext = createContext<TasksContextType | undefined>(undefined);
@@ -27,6 +31,8 @@ export const TasksProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [uid] = useState<string | null>(getSessionUid() ?? null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedComplexity, setSelectedComplexity] = useState<string | null>(null);
+  const [selectedPriority, setSelectedPriority] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   // Load tasks realtime khi uid thay đổi
   useEffect(() => {
@@ -107,10 +113,47 @@ export const TasksProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setSelectedComplexity(complexity);
   };
 
+  const updateSelectedPriority = (priority: string | null) => {
+    setSelectedPriority(priority);
+  };
+
+  const updateSearchTerm = (term: string) => {
+    setSearchTerm(term);
+  };
+
   const filteredTasks = useMemo(() => {
-    if (!selectedComplexity) return tasks;
-    return tasks.filter(task => task.complexity === selectedComplexity);
-  }, [tasks, selectedComplexity]);
+  let result = tasks;
+
+    // Support complexity values as well as a special 'Today' filter.
+    // If selectedComplexity is null -> no complexity/day filtering.
+    if (selectedComplexity) {
+      if (selectedComplexity === 'Today') {
+        // Keep tasks whose deadline date is today (local timezone)
+        const today = new Date();
+        const y = today.getFullYear();
+        const m = today.getMonth();
+        const d = today.getDate();
+        result = result.filter(task => {
+          const dt = new Date(task.deadline);
+          return dt.getFullYear() === y && dt.getMonth() === m && dt.getDate() === d;
+        });
+      } else {
+        result = result.filter(task => task.complexity === selectedComplexity);
+      }
+    }
+
+    // Apply priority filter if set
+    if (selectedPriority) {
+      result = result.filter(task => task.priority === selectedPriority);
+    }
+
+    const trimmed = searchTerm.trim().toLowerCase();
+    if (trimmed) {
+      result = result.filter(task => (task.title || '')?.toLowerCase().includes(trimmed));
+    }
+
+    return result;
+  }, [tasks, selectedComplexity, selectedPriority, searchTerm]);
 
   return (
     <TasksContext.Provider value={{
@@ -123,7 +166,11 @@ export const TasksProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       editTask,
       deleteTask,
       updateSelectedComplexity,
-      filteredTasks
+      updateSelectedPriority,
+      filteredTasks,
+      // expose searchTerm and setter
+      searchTerm,
+      updateSearchTerm
     }}>
       {children}
     </TasksContext.Provider>

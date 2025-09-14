@@ -1,5 +1,5 @@
 import { AppContext, AppContextType } from '@/contexts/app.context';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import {  Plus, User, LogOut } from 'lucide-react';
@@ -11,13 +11,41 @@ import { getSessionEmail } from '@/utils/storage';
 const TopBar = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
-    const { addTask } = useTasks(); // Import hàm addTask từ hook
+    const { addTask, updateSearchTerm } = useTasks(); // Import hàm addTask và updateSearchTerm từ hook
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        
-        console.log('Searching for:', searchTerm);
+
+        const term = searchTerm.trim();
+        if (!term) {
+            toast('Vui lòng nhập từ khóa tìm kiếm', { icon: '🔎' });
+            updateSearchTerm('');
+            return;
+        }
+
+        updateSearchTerm(term);
+        console.log('Searching for (in-context):', term);
     };
+
+    // Call updateSearchTerm as the user types (debounced) so TaskList updates live
+    const debounceRef = useRef<number | null>(null);
+    useEffect(() => {
+        // clear previous timer
+        if (debounceRef.current) window.clearTimeout(debounceRef.current);
+
+        // schedule update
+        debounceRef.current = window.setTimeout(() => {
+            const t = searchTerm.trim();
+            // if empty, clear context search so full list shows
+            updateSearchTerm(t);
+            // small debug log
+            // console.log('Debounced search update:', t);
+        }, 250);
+
+        return () => {
+            if (debounceRef.current) window.clearTimeout(debounceRef.current);
+        };
+    }, [searchTerm, updateSearchTerm]);
 
     return (
         <div className='topbar'>
