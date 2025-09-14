@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Task } from "@/interface/task";
 import { generateAssistantResponse, AssistantRequest } from "@/api/Assistant";
+import BASE_API_URL from "@/config/api";
 import { useToast } from "./Toast";
+import { useTasks } from "@/contexts/tasks.context";
 import "@/css/components/Assistant.css";
 
 interface AssistantProps {
@@ -46,8 +48,10 @@ export const Assistant: React.FC<AssistantProps> = ({ tasks }) => {
   const [showQuickActions, setShowQuickActions] = useState(true);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const responseRef = useRef<HTMLDivElement>(null);
   const { addToast, ToastContainer } = useToast();
+  const { addTask } = useTasks();
 
   // Voice recognition setup
   const recognition = useRef<any>(null);
@@ -209,6 +213,59 @@ export const Assistant: React.FC<AssistantProps> = ({ tasks }) => {
     }
   }, [isListening]);
 
+  // Handle image files (from file input, drop, or paste)
+  const handleImageFiles = useCallback(async (fileList: FileList | null) => {
+    if (!fileList || fileList.length === 0) return;
+    const file = fileList[0];
+    try {
+      addToast('Đang gửi ảnh để trích xuất task...', 'info');
+
+      const form = new FormData();
+      form.append('image', file, file.name || 'image.png');
+
+  const baseUrl = BASE_API_URL;
+  const resp = await fetch(`${baseUrl}/parse-image`, {
+        method: 'POST',
+        body: form,
+      });
+
+      if (!resp.ok) {
+        throw new Error(`Server lỗi: ${resp.status} ${resp.statusText}`);
+      }
+
+      const data = await resp.json();
+      if (!data || !Array.isArray(data.tasks)) {
+        throw new Error('Định dạng phản hồi không hợp lệ từ server trích xuất ảnh');
+      }
+
+      const parsedTasks = data.tasks as Array<any>;
+      let added = 0;
+      parsedTasks.forEach((t) => {
+        if (!t.title) return;
+        const taskPayload = {
+          title: String(t.title),
+          deadline: t.deadline ? String(t.deadline) : new Date().toISOString(),
+          priority: (t.priority === 'high' || t.priority === 'medium' || t.priority === 'low') ? t.priority : 'medium',
+          complexity: (t.complexity === 'high' || t.complexity === 'medium' || t.complexity === 'low') ? t.complexity : 'medium',
+          note: t.note ? String(t.note) : '',
+        } as const;
+
+        try {
+          addTask(taskPayload as any);
+          added += 1;
+        } catch (err) {
+          console.error('Failed to add parsed task', err);
+        }
+      });
+
+      if (added > 0) addToast(`Đã thêm ${added} task từ ảnh`, 'success');
+      else addToast('Không tìm thấy task hợp lệ trong ảnh', 'warning');
+    } catch (err: any) {
+      console.error('Image parse failed', err);
+      addToast(err.message || 'Không thể xử lý ảnh', 'error');
+    }
+  }, [addToast, addTask]);
+
   const handleQuickAction = useCallback((action: typeof QUICK_ACTIONS[0]) => {
     setPrompt(action.query);
     textareaRef.current?.focus();
@@ -241,6 +298,80 @@ export const Assistant: React.FC<AssistantProps> = ({ tasks }) => {
       handleSend();
     }
   };
+
+  // Handle paste events to accept images from clipboard
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+
+    const onPaste = async (e: ClipboardEvent) => {
+      if (!e.clipboardData) return;
+
+      const items = Array.from(e.clipboardData.items || []);
+      const imageItem = items.find(i => i.type.startsWith('image/'));
+      if (!imageItem) return;
+
+      e.preventDefault();
+
+      try {
+        const file = (imageItem as DataTransferItem).getAsFile();
+        if (!file) throw new Error('Không lấy được file ảnh từ clipboard');
+
+        addToast('Đang gửi ảnh để trích xuất task...', 'info');
+        // upload to parsing endpoint
+        const form = new FormData();
+        form.append('image', file, file.name || 'clipboard-image.png');
+
+  const baseUrl = BASE_API_URL;
+  const resp = await fetch(`${baseUrl}/parse-image`, {
+          method: 'POST',
+          body: form,
+        });
+
+        if (!resp.ok) {
+          throw new Error(`Server lỗi: ${resp.status} ${resp.statusText}`);
+        }
+
+        const data = await resp.json();
+
+        // Expect data.tasks: Array<{ title, deadline?, priority?, complexity?, note? }>
+        if (!data || !Array.isArray(data.tasks)) {
+          throw new Error('Định dạng phản hồi không hợp lệ từ server trích xuất ảnh');
+        }
+
+        const parsedTasks = data.tasks as Array<any>;
+        let added = 0;
+        parsedTasks.forEach((t) => {
+          if (!t.title) return;
+          // make reasonable defaults
+          const taskPayload = {
+            title: String(t.title),
+            deadline: t.deadline ? String(t.deadline) : new Date().toISOString(),
+            priority: (t.priority === 'high' || t.priority === 'medium' || t.priority === 'low') ? t.priority : 'medium',
+            complexity: (t.complexity === 'high' || t.complexity === 'medium' || t.complexity === 'low') ? t.complexity : 'medium',
+            note: t.note ? String(t.note) : '',
+          } as const;
+
+          // use addTask from context
+          try {
+            addTask(taskPayload as any);
+            added += 1;
+          } catch (err) {
+            console.error('Failed to add parsed task', err);
+          }
+        });
+
+        if (added > 0) addToast(`Đã thêm ${added} task từ ảnh`, 'success');
+        else addToast('Không tìm thấy task hợp lệ trong ảnh', 'warning');
+      } catch (err: any) {
+        console.error('Paste image parse failed', err);
+        addToast(err.message || 'Không thể xử lý ảnh', 'error');
+      }
+    };
+
+    el.addEventListener('paste', onPaste as any);
+    return () => el.removeEventListener('paste', onPaste as any);
+  }, [addToast, addTask]);
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('vi-VN', {
@@ -294,6 +425,14 @@ export const Assistant: React.FC<AssistantProps> = ({ tasks }) => {
             onChange={(e) => setPrompt(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={loading}
+            onDrop={async (e) => {
+              e.preventDefault();
+              if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                await handleImageFiles(e.dataTransfer.files);
+                e.dataTransfer.clearData();
+              }
+            }}
+            onDragOver={(e) => e.preventDefault()}
           />
           <div style={{ display: 'flex', gap: '0.5rem', flexDirection: 'column' }}>
             <button
@@ -320,7 +459,27 @@ export const Assistant: React.FC<AssistantProps> = ({ tasks }) => {
             >
               {isListening ? '🔴 Đang nghe...' : '🎤 Nói'}
             </button>
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={loading}
+              className="send-button"
+              title="Tải ảnh lên để tạo task tự động"
+              style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)', padding: '0.5rem' }}
+            >
+              📷 Ảnh
+            </button>
           </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={async (e) => {
+              await handleImageFiles(e.target.files);
+              // reset so same file can be selected again
+              if (fileInputRef.current) fileInputRef.current.value = '';
+            }}
+          />
         </div>
 
         {showQuickActions && (
