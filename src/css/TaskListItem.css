@@ -38,6 +38,14 @@
   font-size: 14px;
   color: #6b7280;
 }
+.welcome {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4f46e5; /* Indigo */
+  text-align: center;
+  margin-bottom: 16px;
+  animation: fadeIn 0.5s ease-in-out;
+}
 
 /* Added detailed styles for stat-label-incomplete */
 
@@ -159,5 +167,9 @@
   .stat-label-complete,
   .stat-label-duedate {
     font-size: 12px;
+  }
+
+  .welcome {
+    display: none;
   }
 }

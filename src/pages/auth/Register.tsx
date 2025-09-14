@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './auth.css';
+import '@/css/auth.css';
 import { Link, useNavigate } from 'react-router-dom';
 import backwebm from '@/assets/backwebm.webm';
 import { toast } from 'sonner';

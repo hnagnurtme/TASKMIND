@@ -77,7 +77,7 @@ interface TaskStatsProps {
 function TaskStats ( { stats }: TaskStatsProps ) {
     return (
         <div className="task-stats">
-            <h1 className="sate-item">Welcome to TaskMind</h1>
+            <h1 className="welcome">Welcome to TaskMind</h1>
             <div className="stat-item">
                 <span className="stat-number">{ stats.incomplete }</span>
                 <span className="stat-label-incomplete">Chưa hoàn thành</span>
