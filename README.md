@@ -85,8 +85,49 @@
   * Natural language chat for work status, deadlines, and habit analysis
 * **Realtime Firestore sync**: Multi-device, permanent storage
 * **Student-friendly UI**: Responsive design optimized for desktop/mobile usage patterns
+### d.Screenshots :
 
-### d. Technology Stack and Implementation Methods
+Below are screenshots showcasing the main app flow (click to enlarge) — ordered from entry to deeper analytics:
+
+<details>
+<summary>Expand screenshots gallery</summary>
+
+### 1.Login Page
+<img src="screenshot/LOGIN.png" alt="Login Page" style="max-width:100%;height:auto" />
+
+### 2. Homepage
+<img src="screenshot/HOMEPAGE.png" alt="Homepage" style="max-width:100%;height:auto" />
+
+### 3. Home / Today List
+<img src="screenshot/TODAY.png" alt="Today List" style="max-width:100%;height:auto" />
+
+### 4. Add Task
+<img src="screenshot/ADDTASK.png" alt="Add Task" style="max-width:100%;height:auto" />
+
+### 5. Search
+<img src="screenshot/SEARCH.png" alt="Search" style="max-width:100%;height:auto" />
+
+### 6. Calendar (Week)
+<img src="screenshot/CALENDAR2.png" alt="Calendar Month" style="max-width:100%;height:auto" />
+
+### 7. Calendar 
+<img src="screenshot/CALENDAR3.png" alt="Calendar Week" style="max-width:100%;height:auto" />
+
+### 8. Calendar (Agenda)
+<img src="screenshot/CALENDARVIEW.png" alt="Calendar Agenda" style="max-width:100%;height:auto" />
+
+### 9. Dashboard / Value vs. Effort Matrix
+<img src="screenshot/DASHBOARD.png" alt="Dashboard Heatmap" style="max-width:100%;height:auto" />
+
+### 10. Chart / Heatmap
+<img src="screenshot/CHART.png" alt="Chart / Heatmap" style="max-width:100%;height:auto" />
+
+### 11. AI Assistant
+<img src="screenshot/ASSISTANT.png" alt="AI Assistant" style="max-width:100%;height:auto" />
+
+</details>
+
+### e. Technology Stack and Implementation Methods
 **Frontend Technologies:**
 * **React 18** with **TypeScript** for type-safe component development
 * **Tailwind CSS** for utility-first responsive styling
@@ -109,7 +150,7 @@
 * **Render** for production deployment
 * **Git/GitHub** for version control
 
-### e. Service Architecture & Database structure (when used)
+### f. Service Architecture & Database structure (when used)
 ✍️ 
 **Service Architecture:**
 ```
