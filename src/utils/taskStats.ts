@@ -8,12 +8,18 @@ import { TaskStatsData } from '@/components/TaskStats';
  */
 export const calculateTaskStats = (tasks: Task[]): TaskStatsData => {
     const now = new Date();
+    const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     
     const incomplete = tasks.filter(task => !task.completed).length;
     const completed = tasks.filter(task => task.completed).length;
-    const overdue = tasks.filter(task => 
-        new Date(task.deadline) < now && !task.completed
-    ).length;
+    const overdue = tasks.filter(task => {
+        const deadlineDate = new Date(task.deadline);
+        // Skip invalid dates
+        if (isNaN(deadlineDate.getTime())) return false;
+        
+        const deadlineOnly = new Date(deadlineDate.getFullYear(), deadlineDate.getMonth(), deadlineDate.getDate());
+        return deadlineOnly < nowOnly && !task.completed;
+    }).length;
 
     return {
         incomplete,
@@ -40,11 +46,18 @@ export const calculateExtendedTaskStats = (tasks: Task[]) => {
     // Calculate upcoming deadlines (tasks due within next 7 days)
     const nextWeek = new Date();
     nextWeek.setDate(nextWeek.getDate() + 7);
+    const nextWeekOnly = new Date(nextWeek.getFullYear(), nextWeek.getMonth(), nextWeek.getDate());
     
     const upcomingDeadlines = tasks.filter(task => {
         const dueDate = new Date(task.deadline);
+        // Skip invalid dates
+        if (isNaN(dueDate.getTime())) return false;
+        
         const now = new Date();
-        return dueDate > now && dueDate <= nextWeek && !task.completed;
+        const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const dueDateOnly = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate());
+        
+        return dueDateOnly > nowOnly && dueDateOnly <= nextWeekOnly && !task.completed;
     }).length;
 
     return {

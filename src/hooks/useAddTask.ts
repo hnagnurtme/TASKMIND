@@ -40,8 +40,19 @@ const useAddTask = ({ onAddTask, onClose }: UseAddTaskProps) => {
       newErrors.deadline = "Deadline không được để trống";
     } else {
       const deadlineDate = new Date(formData.deadline);
-      if (deadlineDate <= new Date()) {
-        newErrors.deadline = "Deadline phải sau thời điểm hiện tại";
+      
+      // Check for Invalid Date
+      if (isNaN(deadlineDate.getTime())) {
+        newErrors.deadline = "Định dạng thời gian không hợp lệ";
+      } else {
+        // Compare only dates, not time
+        const now = new Date();
+        const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const deadlineOnly = new Date(deadlineDate.getFullYear(), deadlineDate.getMonth(), deadlineDate.getDate());
+        
+        if (deadlineOnly < nowOnly) {
+          newErrors.deadline = "Deadline không thể là ngày trong quá khứ";
+        }
       }
     }
 
@@ -52,9 +63,17 @@ const useAddTask = ({ onAddTask, onClose }: UseAddTaskProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
+      const deadlineDate = new Date(formData.deadline);
+      
+      // Double check for Invalid Date before submitting
+      if (isNaN(deadlineDate.getTime())) {
+        setErrors(prev => ({ ...prev, deadline: "Định dạng thời gian không hợp lệ" }));
+        return;
+      }
+
       onAddTask({
         title: formData.title.trim(),
-        deadline: new Date(formData.deadline).toISOString(),
+        deadline: deadlineDate.toISOString(),
         value: formData.priority,
         complexity: formData.complexity,
         priority: formData.priority,

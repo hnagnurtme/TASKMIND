@@ -42,8 +42,19 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, loading }: TaskIte
 
   const formatDeadline = (deadline: string) => {
     const date = new Date(deadline);
+    
+    // Check for Invalid Date
+    if (isNaN(date.getTime())) {
+      return { text: "Ngày không hợp lệ", className: "invalid", urgent: false };
+    }
+    
     const now = new Date();
-    const diffTime = date.getTime() - now.getTime();
+    
+    // Reset time to compare only dates (not time)
+    const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    const diffTime = dateOnly.getTime() - nowOnly.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) return { text: "Quá hạn", className: "overdue", urgent: true };
@@ -56,7 +67,20 @@ const TaskItem = ({ task, onToggleComplete, onEdit, onDelete, loading }: TaskIte
 
   const formatDateTime = (dateTimeString: string) => {
     const date = new Date(dateTimeString);
-    return date.toISOString().slice(0, 16); // Formats to 'yyyy-MM-ddThh:mm'
+    
+    // Check for Invalid Date
+    if (isNaN(date.getTime())) {
+      return "Thời gian không hợp lệ";
+    }
+    
+    // Format to local time instead of UTC
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
   };
 
   const handleDelete = useCallback(() => {

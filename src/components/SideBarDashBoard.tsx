@@ -26,6 +26,7 @@ interface IComplexityFilterButtonProps {
 }
 
 const DASHBOARD_LINKS: TSidebarLinks[] = [
+  { title: 'DashBoard', path: '/taskmind', icon: <LayoutDashboard size={18} /> },
   { title: 'Home', path: '/', icon: <LayoutDashboard size={18} /> },
   { title: 'Chart', path: '/chart', icon: <BarChart3 size={18} /> },
   { title: 'Calendar', path: '/calendar', icon: <CalendarDays size={18} /> },

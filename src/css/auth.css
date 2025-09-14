@@ -16,6 +16,15 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 1.2rem;
+    border-radius: 8px;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.google-login-1:hover {
+    border-color: #4285f4;
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+    transform: translateY(-2px);
 }
 /* Overlay tối để chữ/form dễ nhìn hơn */
 .auth-container::before {

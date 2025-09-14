@@ -40,16 +40,33 @@ export const useTasks = () => {
 
   const sortedTasks = [...tasks].sort((a, b) => {
     if (a.completed !== b.completed) return a.completed ? 1 : -1;
-    return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+    
+    const dateA = new Date(a.deadline);
+    const dateB = new Date(b.deadline);
+    
+    // Handle Invalid Dates - put them at the end
+    if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0;
+    if (isNaN(dateA.getTime())) return 1;
+    if (isNaN(dateB.getTime())) return -1;
+    
+    return dateA.getTime() - dateB.getTime();
   });
 
   const stats = {
     total: tasks.length,
     incomplete: tasks.filter((t) => !t.completed).length,
     completed: tasks.filter((t) => t.completed).length,
-    overdue: tasks.filter(
-      (t) => !t.completed && new Date(t.deadline) <= new Date()
-    ).length,
+    overdue: tasks.filter((t) => {
+      if (t.completed) return false;
+      const deadline = new Date(t.deadline);
+      if (isNaN(deadline.getTime())) return false;
+      
+      const now = new Date();
+      const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const deadlineOnly = new Date(deadline.getFullYear(), deadline.getMonth(), deadline.getDate());
+      
+      return deadlineOnly < nowOnly;
+    }).length,
   };
 
 

@@ -64,7 +64,7 @@ function LoginWithGoogle () {
         <div>
             <p className="google-login"></p>
             <div className="google-login-1" onClick={ SIGN_IN_WITH_GOOGLE }>
-                <img src={ google } width={ '60%' } alt="Google login button" />
+                <img src={ google } width={ '80%' }  alt="Google login button" />
             </div>
         </div>
     )

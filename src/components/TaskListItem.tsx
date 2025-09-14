@@ -89,7 +89,16 @@ function TasksContainer ( {
         if ( a.completed !== b.completed ) {
             return a.completed ? 1 : -1; // incomplete first
         }
-        return new Date( a.deadline ).getTime() - new Date( b.deadline ).getTime();
+        
+        const dateA = new Date( a.deadline );
+        const dateB = new Date( b.deadline );
+        
+        // Handle Invalid Dates - put them at the end
+        if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0;
+        if (isNaN(dateA.getTime())) return 1;
+        if (isNaN(dateB.getTime())) return -1;
+        
+        return dateA.getTime() - dateB.getTime();
     } );
 
     const stats = calculateTaskStats(tasks);

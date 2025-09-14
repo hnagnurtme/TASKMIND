@@ -3,6 +3,7 @@ import { useTasks } from '@/contexts/tasks.context';
 import { useState, useEffect } from 'react';
 import "@/css/home.css";
 import CalendarView from "@/components/Calendar";
+import ValueComplexityMatrix from "@/components/DashBoard";
 
 export default function DashBoard () {
     const { tasks } = useTasks();
@@ -13,18 +14,13 @@ export default function DashBoard () {
         return () => clearTimeout( timer );
     }, [] );
 
-    const completionPercent = tasks.length
-        ? ( tasks.filter( ( task ) => task.completed ).length / tasks.length ) * 100
-        : 0;
-
     if ( isLoading ) {
         return <div className="loading-screen">Loading...</div>;
     }
 
     return (
         <div className="main-content">
-            <TaskProgress completionPercent={ completionPercent } />
-            < CalendarView />
+            < ValueComplexityMatrix />
         </div>
     );
 }
