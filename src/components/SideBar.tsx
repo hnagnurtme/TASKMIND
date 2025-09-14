@@ -23,9 +23,15 @@ interface IComplexityFilterButtonProps {
 // ========================= CONSTANTS =========================
 const COMPLEXITY_FILTERS: IComplexityFilter[] = [
   { label: 'All', value: 'All', color: ''},
+  { label: 'Today', value: 'Today', color: '#3b82f6' },
+  // Priority filters (separate from complexity)
+  { label: 'High Priority', value: 'priority_high', color: '#ef4444' },
+  { label: 'Medium Priority', value: 'priority_medium', color: '#f59e0b' },
+  { label: 'Low Priority', value: 'priority_low', color: '#10b981' },
+  // Complexity filters
   { label: 'High Complexity', value: 'high', color: '#ef4444' },
   { label: 'Medium Complexity', value: 'medium', color: '#f59e0b' },
-  { label: 'Low Complexity', value: 'low', color: '#10b981' }
+  { label: 'Low Complexity', value: 'low', color: '#10b981' },
 ];
 
 // ========================= SUB COMPONENTS =========================
@@ -94,19 +100,40 @@ function NavigationSection({ currentPath }: { currentPath: string }) {
 }
 
 function ComplexityFiltersSection() {
-  const { updateSelectedComplexity } = useTasks();
+  const { updateSelectedComplexity, updateSelectedPriority } = useTasks();
 
   return (
     <div className="sidebar-section">
       <h3 className="sidebar-section-title">Quick Filters</h3>
-      <div className="complexity-filters" role="group" aria-label="Complexity level filters">
+      <div className="complexity-filters" role="group" aria-label="Complexity and priority filters">
         {COMPLEXITY_FILTERS.map((filter) => (
           <ComplexityFilterButton
             key={filter.value}
             filter={filter}
-            onClick={(value) =>
-              updateSelectedComplexity(value === 'All' ? null : value)
-            }
+            onClick={(value) => {
+              if (value === 'All') {
+                updateSelectedComplexity(null);
+                updateSelectedPriority(null);
+                return;
+              }
+
+              // Today is a special complexity-like filter
+              if (value === 'Today' || ['high', 'medium', 'low'].includes(value)) {
+                updateSelectedComplexity(value === 'Today' ? 'Today' : value);
+                // clear priority when selecting complexity
+                updateSelectedPriority(null);
+                return;
+              }
+
+              // Priority filters use the prefix 'priority_<level>'
+              if (value.startsWith('priority_')) {
+                const level = value.replace('priority_', '');
+                updateSelectedPriority(level);
+                // clear complexity when selecting priority
+                updateSelectedComplexity(null);
+                return;
+              }
+            }}
           />
         ))}
       </div>
