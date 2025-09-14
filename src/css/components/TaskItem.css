@@ -1,0 +1,101 @@
+/* TaskItem Component Styles */
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f1f5f9;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.task-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-color: #e2e8f0;
+}
+
+.task-item.completed {
+  background: #fafafa;
+  opacity: 0.8;
+}
+
+/* Adjusted styles for incomplete tasks */
+.task-item.incomplete {
+  background: #fff7e6; /* Light orange background */
+  border-color: #ffd580; /* Orange border */
+}
+
+/* Added animation for incomplete tasks */
+@keyframes highlightIncomplete {
+  0% {
+    background-color: #fff7e6;
+  }
+  50% {
+    background-color: #ffe8cc;
+  }
+  100% {
+    background-color: #fff7e6;
+  }
+}
+
+.task-item.incomplete {
+  animation: highlightIncomplete 1.5s ease-in-out infinite;
+}
+
+.task-item.deleting {
+  animation: slideOut 0.3s ease forwards;
+}
+
+@keyframes slideOut {
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Added styles for high-priority tasks */
+.task-item.high-priority {
+  background: #fee2e2; /* Light red background */
+  border-color: #dc2626; /* Red border */
+}
+
+/* Added animation for high-priority tasks */
+@keyframes pulseHighPriority {
+  0% {
+    background-color: #fee2e2;
+  }
+  50% {
+    background-color: #fecaca;
+  }
+  100% {
+    background-color: #fee2e2;
+  }
+}
+
+.task-item.high-priority {
+  animation: pulseHighPriority 1.5s ease-in-out infinite;
+}
+
+/* Added animation for loading tasks */
+.task-item.loading {
+  background: #e0f7fa; /* Light blue background */
+  animation: loadingAnimation 1.5s ease-in-out infinite;
+}
+
+@keyframes loadingAnimation {
+  0% {
+    background-color: #e0f7fa;
+  }
+  50% {
+    background-color: #b2ebf2;
+  }
+  100% {
+    background-color: #e0f7fa;
+  }
+}

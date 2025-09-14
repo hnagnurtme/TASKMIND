@@ -1,0 +1,228 @@
+/* Reverting to the previous state */
+
+/* Enhanced styles for TaskItem */
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #f9fafb, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.task-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.task-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  flex: 1;
+  margin-right: 12px;
+}
+
+.task-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.task-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.task-button.edit {
+  background-color: #2563eb;
+}
+
+.task-button.edit:hover {
+  background-color: #1d4ed8;
+  transform: scale(1.05);
+}
+
+.task-button.delete {
+  background-color: #dc2626;
+}
+
+.task-button.delete:hover {
+  background-color: #b91c1c;
+  transform: scale(1.05);
+}
+
+/* Enhanced styles for badges */
+.badges {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 8px;
+}
+
+.complexity-badge,
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.complexity-badge:hover,
+.priority-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.complexity-icon,
+.priority-icon {
+  font-size: 14px;
+}
+
+.complexity-text,
+.priority-text {
+  font-size: 11px;
+}
+
+/* Enhanced styles for task-meta */
+.task-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.deadline-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.deadline-info.overdue {
+  color: #dc2626;
+}
+
+.deadline-info.today {
+  color: #f59e0b;
+}
+
+.deadline-info.tomorrow {
+  color: #2563eb;
+}
+
+.deadline-info.week {
+  color: #10b981;
+}
+
+.deadline-info.future {
+  color: #6b7280;
+}
+
+.task-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Enhanced styles for task-actions */
+.task-actions {
+  display: flex;
+  flex-direction: column; /* Arrange buttons vertically */
+  gap: 10px;
+  position: absolute;
+  right: 10px; /* Adjusted to reduce space occupation */
+  top: 50%;
+  transform: translateY(-50%); /* Center vertically */
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  width: auto; /* Ensure it doesn't occupy the entire right side */
+}
+
+.task-actions.visible {
+  opacity: 1;
+}
+
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.action-btn.edit-btn {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+.action-btn.edit-btn:hover {
+  background: #2563eb;
+}
+
+.action-btn.delete-btn {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.action-btn.delete-btn:hover {
+  background: #dc2626;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .task-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .task-buttons {
+    margin-top: 12px;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .task-button {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .task-label {
+    font-size: 16px;
+  }
+
+  .task-button {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}

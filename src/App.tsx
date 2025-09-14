@@ -1,22 +1,11 @@
-import './App.css'
-import hackathonGraphic from './assets/hackathon-graphic.svg'
-import naverLogo from './assets/naver-logo.svg'
+import useRoutesElements from "./hooks/useRoutesElements";
+import Modal from "react-modal";
 
+// Gắn element chính của app cho modal
+Modal.setAppElement("#root"); // "#root" là id của div gốc trong index.html
 function App() {
-  return (
-    <div className="container">
-      <div className="content">
-        <img src={naverLogo} alt="NAVER Vietnam AI Hackathon" className="logo" />
-        
-        <div className="greeting">
-          <p className="hello">Xin chào! 안녕하세요!</p>
-          <p className="subtitle">Hello World</p>
-        </div>
-      </div>
-      
-      <img className="graphic" src={hackathonGraphic} alt="" />
-    </div>
-  )
+  const routerDom = useRoutesElements();
+  return <>{routerDom}</>;
 }
 
-export default App
+export default App;

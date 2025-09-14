@@ -1,0 +1,175 @@
+/* Styles for TaskStats component */
+
+.task-stats {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 16px;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stat-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #6b7280;
+}
+.welcome {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4f46e5; /* Indigo */
+  text-align: center;
+  margin-bottom: 16px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Added detailed styles for stat-label-incomplete */
+
+.stat-label-incomplete {
+  font-size: 14px;
+  color: #f59e0b; /* Amber color for incomplete tasks */
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: pulseIncomplete 1.5s infinite;
+}
+
+@keyframes pulseIncomplete {
+  0% {
+    color: #f59e0b;
+  }
+  50% {
+    color: #d97706; /* Darker amber */
+  }
+  100% {
+    color: #f59e0b;
+  }
+}
+
+/* Added detailed styles for stat-label-complete */
+.stat-label-complete {
+  font-size: 14px;
+  color: #10b981; /* Green color for completed tasks */
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: pulseComplete 1.5s infinite;
+}
+
+@keyframes pulseComplete {
+  0% {
+    color: #10b981;
+  }
+  50% {
+    color: #059669; /* Darker green */
+  }
+  100% {
+    color: #10b981;
+  }
+}
+
+/* Added detailed styles for stat-label-duedate */
+.stat-label-duedate {
+  font-size: 14px;
+  color: #ef4444; /* Red color for overdue tasks */
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: pulseDueDate 1.5s infinite;
+}
+
+@keyframes pulseDueDate {
+  0% {
+    color: #ef4444;
+  }
+  50% {
+    color: #b91c1c; /* Darker red */
+  }
+  100% {
+    color: #ef4444;
+  }
+}
+
+/* Styles for empty-add-btn */
+
+.empty-add-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  background: #f0f0f0;
+  color: #333;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.empty-add-btn:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+/* Responsive styles for TaskListItem */
+@media (max-width: 768px) {
+  .task-stats {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat-item {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .task-items {
+    padding: 0 10px;
+  }
+
+  .empty-add-btn {
+    width: 100%;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-number {
+    font-size: 18px;
+  }
+
+  .stat-label-incomplete,
+  .stat-label-complete,
+  .stat-label-duedate {
+    font-size: 12px;
+  }
+
+  .welcome {
+    display: none;
+  }
+}
