@@ -22,6 +22,8 @@ class AssistantAPIError extends Error {
  * @param request - The request containing prompt and tasks
  * @returns Promise with AI response
  */
+import BASE_API_URL from "@/config/api";
+
 export const generateAssistantResponse = async (
     request: AssistantRequest
 ): Promise<AssistantResponse> => {
@@ -45,8 +47,8 @@ Dưới đây là danh sách task hiện tại của bạn:\n
 ${ taskContext }\n
 Hãy đưa ra gợi ý quản lý deadline hiệu quả.`;
 
-        const baseUrl = "https://gemini-server-59yh.onrender.com";
-        const response = await fetch( `${ baseUrl }/generate`, {
+    const baseUrl = BASE_API_URL;
+    const response = await fetch(`${baseUrl}/generate`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -93,8 +95,8 @@ Hãy đưa ra gợi ý quản lý deadline hiệu quả.`;
  */
 export const checkAssistantServiceHealth = async (): Promise<boolean> => {
     try {
-        const baseUrl = "https://gemini-server-59yh.onrender.com";
-        const response = await fetch( `${ baseUrl }/health`, {
+        const baseUrl = BASE_API_URL;
+        const response = await fetch(`${baseUrl}/health`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         } );
