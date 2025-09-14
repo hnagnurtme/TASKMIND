@@ -6,10 +6,14 @@ import "@/css/ValueComplexityMatrix.css";
 interface TaskDataPoint {
   id: string;
   title: string;
-  value: number;      // 1-3
-  complexity: number; // 1-3
-  status: string;
+  value: number;      // 1-3 với jitter
+  complexity: number; // 1-3 với jitter
+  originalValue: number;    // Giá trị gốc để hiển thị trong tooltip
+  originalComplexity: number; // Giá trị gốc để hiển thị trong tooltip
+  status: string;     // 'completed' | 'pending' | 'overdue'
   priority: string;
+  deadline: string;
+  isCompleted: boolean;
 }
 
 const VALUE_SCALE_LABELS = ["Low Value", "Medium Value", "High Value"];
@@ -17,22 +21,26 @@ const COMPLEXITY_SCALE_LABELS = ["Low Complexity", "Medium Complexity", "High Co
 
 // Màu sắc theo trạng thái
 const STATUS_COLORS = {
-  todo: "#ef4444",      // Red
-  progress: "#f59e0b",  // Amber
-  done: "#10b981",      // Emerald
-  default: "#3b82f6"    // Blue
+  completed: "#10b981",    // Xanh lá - Đã hoàn thành
+  pending: "#3b82f6",      // Xanh dương - Đang chờ (chưa quá hạn)
+  overdue: "#ef4444",      // Đỏ - Quá hạn
+  progress: "#f59e0b",     // Vàng cam - Đang làm (có thể thêm logic sau)
+  default: "#64748b"       // Xám - Mặc định
 } as const;
 
 const ValueComplexityMatrix: React.FC = () => {
   const { tasks } = useTasks();
 
-  // Xử lý dữ liệu an toàn hơn
+  // Xử lý dữ liệu an toàn hơn và thêm jitter để tránh chồng lấp
   const taskDataPoints: TaskDataPoint[] = useMemo(() => {
     if (!tasks || !Array.isArray(tasks)) {
       return [];
     }
     
-    return tasks.map(t => {
+    // Theo dõi số lượng tasks tại mỗi vị trí để tạo jitter
+    const positionCounts: Record<string, number> = {};
+    
+    return tasks.map((t, index) => {
       // Xử lý value an toàn
       let valueScore = 2; // default medium
       if (t.value) {
@@ -49,31 +57,46 @@ const ValueComplexityMatrix: React.FC = () => {
         complexityScore = t.complexity === "low" ? 1 : t.complexity === "medium" ? 2 : 3;
       }
       
+      // Tạo key cho vị trí để theo dõi số lượng tasks
+      const positionKey = `${valueScore}-${complexityScore}`;
+      positionCounts[positionKey] = (positionCounts[positionKey] || 0) + 1;
+      const positionIndex = positionCounts[positionKey];
+      
+      // Thêm jitter nhỏ để tránh chồng lấp (0.1 unit max)
+      const jitterRadius = 0.08;
+      const angle = (positionIndex * 60 + index * 20) * (Math.PI / 180); // Góc dựa trên vị trí
+      const distance = Math.min(positionIndex * 0.02, jitterRadius); // Khoảng cách tăng dần
+      
+      const jitteredValue = valueScore + Math.cos(angle) * distance;
+      const jitteredComplexity = complexityScore + Math.sin(angle) * distance;
+      
+      // Xác định trạng thái task dựa trên completed và deadline
+      const currentDate = new Date();
+      const deadlineDate = new Date(t.deadline);
+      let taskStatus = 'pending'; // Mặc định là đang chờ
+      
+      if (t.completed) {
+        taskStatus = 'completed'; // Đã hoàn thành
+      } else if (deadlineDate < currentDate) {
+        taskStatus = 'overdue'; // Quá hạn
+      } else {
+        taskStatus = 'pending'; // Còn hạn, đang chờ làm
+      }
+      
       return {
         id: t.id,
         title: t.title || 'Untitled Task',
-        value: valueScore,
-        complexity: complexityScore,
-        status: t.completed ? 'done' : 'todo',
-        priority: t.priority || 'low'
+        value: jitteredValue,
+        complexity: jitteredComplexity,
+        originalValue: valueScore,
+        originalComplexity: complexityScore,
+        status: taskStatus,
+        priority: t.priority || 'low',
+        deadline: t.deadline,
+        isCompleted: t.completed
       };
     });
   }, [tasks]);
-
-  // Hàm lấy màu theo status (memoized)
-  const getTaskColor = useCallback((point: TaskDataPoint): string => {
-    return STATUS_COLORS[point.status as keyof typeof STATUS_COLORS] || STATUS_COLORS.default;
-  }, []);
-
-  // Hàm lấy kích thước dot theo priority (memoized)
-  const getTaskSize = useCallback((priority: string): number => {
-    switch(priority) {
-      case 'high': return 8;
-      case 'medium': return 6;
-      case 'low': return 4;
-      default: return 5;
-    }
-  }, []);
 
   // Custom tooltip component (memoized)
   const CustomTooltip = useCallback(({ active, payload }: any) => {
@@ -86,6 +109,18 @@ const ValueComplexityMatrix: React.FC = () => {
       return null;
     }
 
+    // Format deadline
+    const deadlineDate = new Date(task.deadline);
+    const formattedDeadline = deadlineDate.toLocaleDateString('vi-VN');
+    const isOverdue = deadlineDate < new Date() && !task.isCompleted;
+
+    // Status labels
+    const statusLabels = {
+      completed: 'HOÀN THÀNH',
+      pending: 'ĐANG CHỜ',
+      overdue: 'QUÁ HẠN'
+    };
+
     return (
       <div className="value-complexity-tooltip">
         <div className="value-complexity-tooltip__header">
@@ -93,20 +128,26 @@ const ValueComplexityMatrix: React.FC = () => {
           <span 
             className={`value-complexity-tooltip__status value-complexity-tooltip__status--${task.status}`}
           >
-            {task.status.toUpperCase()}
+            {statusLabels[task.status as keyof typeof statusLabels] || task.status.toUpperCase()}
           </span>
         </div>
         <div className="value-complexity-tooltip__content">
           <div className="value-complexity-tooltip__item">
+            <span className="value-complexity-tooltip__label">Deadline:</span>
+            <span className={`value-complexity-tooltip__value ${isOverdue ? 'text-red-600' : ''}`}>
+              {formattedDeadline}
+            </span>
+          </div>
+          <div className="value-complexity-tooltip__item">
             <span className="value-complexity-tooltip__label">Value:</span>
             <span className="value-complexity-tooltip__value">
-              {VALUE_SCALE_LABELS[task.value - 1] || 'Unknown'}
+              {VALUE_SCALE_LABELS[task.originalValue - 1] || 'Unknown'}
             </span>
           </div>
           <div className="value-complexity-tooltip__item">
             <span className="value-complexity-tooltip__label">Complexity:</span>
             <span className="value-complexity-tooltip__value">
-              {COMPLEXITY_SCALE_LABELS[task.complexity - 1] || 'Unknown'}
+              {COMPLEXITY_SCALE_LABELS[task.originalComplexity - 1] || 'Unknown'}
             </span>
           </div>
           <div className="value-complexity-tooltip__item">
@@ -121,6 +162,19 @@ const ValueComplexityMatrix: React.FC = () => {
       </div>
     );
   }, []);
+
+  // Nhóm tasks theo status để tạo scatter riêng biệt
+  const tasksByStatus = useMemo(() => {
+    const grouped = taskDataPoints.reduce((acc, task) => {
+      if (!acc[task.status]) {
+        acc[task.status] = [];
+      }
+      acc[task.status].push(task);
+      return acc;
+    }, {} as Record<string, TaskDataPoint[]>);
+    
+    return grouped;
+  }, [taskDataPoints]);
 
   // Tối ưu hóa tick formatter
   const xAxisTickFormatter = useCallback((t: number) => {
@@ -142,15 +196,27 @@ const ValueComplexityMatrix: React.FC = () => {
           <div className="value-complexity-matrix__legend-group">
             <span className="value-complexity-matrix__legend-title">Status:</span>
             <div className="value-complexity-matrix__legend-items">
-              {Object.entries(STATUS_COLORS).filter(([key]) => key !== 'default').map(([status, color]) => (
-                <div key={status} className="value-complexity-matrix__legend-item">
-                  <div 
-                    className="value-complexity-matrix__legend-color"
-                    style={{ backgroundColor: color }}
-                  />
-                  <span>{status}</span>
-                </div>
-              ))}
+              <div className="value-complexity-matrix__legend-item">
+                <div 
+                  className="value-complexity-matrix__legend-color"
+                  style={{ backgroundColor: STATUS_COLORS.completed }}
+                />
+                <span>Hoàn thành</span>
+              </div>
+              <div className="value-complexity-matrix__legend-item">
+                <div 
+                  className="value-complexity-matrix__legend-color"
+                  style={{ backgroundColor: STATUS_COLORS.pending }}
+                />
+                <span>Đang chờ</span>
+              </div>
+              <div className="value-complexity-matrix__legend-item">
+                <div 
+                  className="value-complexity-matrix__legend-color"
+                  style={{ backgroundColor: STATUS_COLORS.overdue }}
+                />
+                <span>Quá hạn</span>
+              </div>
             </div>
           </div>
           <div className="value-complexity-matrix__legend-group">
@@ -220,15 +286,16 @@ const ValueComplexityMatrix: React.FC = () => {
               tickLine={{ stroke: '#cbd5e1' }}
               tickFormatter={yAxisTickFormatter}
             >
-              <Label 
+                            <Label 
                 value="Implementation Complexity" 
                 angle={-90} 
                 position="insideLeft"
+                offset={-15}
                 style={{ 
                   textAnchor: 'middle', 
                   fill: '#374151', 
                   fontSize: 14, 
-                  fontWeight: 600 
+                  fontWeight: 600
                 }}
               />
             </YAxis>
@@ -238,12 +305,16 @@ const ValueComplexityMatrix: React.FC = () => {
               cursor={{ strokeDasharray: '3 3' }}
             />
 
-            <Scatter
-              name="Tasks"
-              data={taskDataPoints}
-              fill="#3b82f6"
-              isAnimationActive={false}
-            />
+            {/* Render scatter cho từng status với màu khác nhau */}
+            {Object.entries(tasksByStatus).map(([status, tasks]) => (
+              <Scatter
+                key={status}
+                name={status}
+                data={tasks}
+                fill={STATUS_COLORS[status as keyof typeof STATUS_COLORS] || STATUS_COLORS.default}
+                isAnimationActive={false}
+              />
+            ))}
           </ScatterChart>
         </ResponsiveContainer>
 

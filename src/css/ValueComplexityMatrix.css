@@ -210,6 +210,7 @@
   position: absolute;
   pointer-events: none; /* Quan trọng: không can thiệp vào click events */
   z-index: 1; /* Giảm z-index để không che khuất tooltip */
+  opacity: 1; /* Đảm bảo hiển thị mặc định */
   transition: opacity 0.3s ease;
 }
 
@@ -219,93 +220,92 @@
   align-items: center;
   text-align: center;
   gap: 4px;
-  background: rgba(255, 255, 255, 0.85); /* Giảm opacity để ít che khuất hơn */
-  padding: 8px 12px; /* Giảm padding */
-  border-radius: 12px; /* Giảm border radius */
+  background: rgba(255, 255, 255, 0.9); /* Tăng opacity để dễ nhìn hơn */
+  padding: 10px 14px; /* Tăng padding một chút */
+  border-radius: 12px;
   box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.06), /* Giảm shadow */
-    0 2px 4px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(226, 232, 240, 0.6);
-  backdrop-filter: blur(8px); /* Giảm blur */
+    0 6px 16px rgba(0, 0, 0, 0.08), /* Tăng shadow để nổi bật hơn */
+    0 3px 6px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  backdrop-filter: blur(10px);
   transition: all 0.3s ease;
-  pointer-events: none; /* Đảm bảo không can thiệp click */
+  pointer-events: none;
 }
 
-/* Ẩn quadrant labels khi hover vào chart area */
+/* Chỉ làm mờ nhẹ khi hover vào chart area */
 .value-complexity-matrix__chart-wrapper:hover .value-complexity-quadrant {
-  opacity: 0.3; /* Làm mờ khi user đang tương tác với chart */
+  opacity: 0.7; /* Chỉ làm mờ nhẹ, không quá nhiều */
 }
 
-/* Ẩn hoàn toàn quadrant labels khi tooltip xuất hiện */
-.value-complexity-matrix__chart-wrapper:has(.recharts-tooltip-wrapper) .value-complexity-quadrant {
-  opacity: 0;
-  visibility: hidden;
-}
-
-/* Alternative fallback cho browsers không support :has() */
+/* Chỉ ẩn khi có tooltip active và không dùng :has() selector phức tạp */
 .value-complexity-matrix--tooltip-active .value-complexity-quadrant {
-  opacity: 0;
-  visibility: hidden;
+  opacity: 0.2; /* Chỉ làm mờ thay vì ẩn hoàn toàn */
 }
 
 .value-complexity-quadrant__icon {
-  font-size: 16px; /* Giảm size icon */
+  font-size: 18px; /* Tăng size icon */
   line-height: 1;
 }
 
 .value-complexity-quadrant__text {
-  font-size: 12px; /* Giảm font size */
-  font-weight: 600; /* Giảm font weight */
+  font-size: 13px; /* Tăng font size */
+  font-weight: 700; /* Tăng font weight để dễ đọc hơn */
   color: #1e293b;
   white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8); /* Thêm text shadow để dễ đọc */
 }
 
 .value-complexity-quadrant small {
-  font-size: 10px; /* Giảm font size */
+  font-size: 11px; /* Tăng font size */
   color: #64748b;
-  font-weight: 400; /* Giảm font weight */
+  font-weight: 500; /* Tăng font weight */
   white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8); /* Thêm text shadow */
 }
 
-/* Quadrant Positioning - Di chuyển ra ngoài data area */
+/* Quadrant Positioning - Di chuyển xa khỏi các trục để không bị che */
 .value-complexity-quadrant--quick-wins {
-  top: 20px; /* Đưa lên trên cùng */
-  left: 30px; /* Đưa ra ngoài trái */
+  top: 60px; /* Đưa xuống xa khỏi trục trên */
+  left: 80px; /* Đưa ra xa khỏi trục Y bên trái */
 }
 
 .value-complexity-quadrant--quick-wins .value-complexity-quadrant__label {
-  background: linear-gradient(135deg, rgba(236, 253, 245, 0.8) 0%, rgba(209, 250, 229, 0.8) 100%);
-  border-color: rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, rgba(236, 253, 245, 0.95) 0%, rgba(209, 250, 229, 0.95) 100%);
+  border-color: rgba(16, 185, 129, 0.4);
+  border-width: 2px;
 }
 
 .value-complexity-quadrant--major-projects {
-  top: 20px; /* Đưa lên trên cùng */
-  right: 30px; /* Đưa ra ngoài phải */
+  top: 60px; /* Đưa xuống xa khỏi trục trên */
+  right: 50px; /* Đưa ra xa khỏi edge bên phải */
 }
 
 .value-complexity-quadrant--major-projects .value-complexity-quadrant__label {
-  background: linear-gradient(135deg, rgba(239, 246, 255, 0.8) 0%, rgba(219, 234, 254, 0.8) 100%);
-  border-color: rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.95) 0%, rgba(219, 234, 254, 0.95) 100%);
+  border-color: rgba(59, 130, 246, 0.4);
+  border-width: 2px;
 }
 
 .value-complexity-quadrant--fill-ins {
-  bottom: 20px; /* Đưa xuống dưới cùng */
-  left: 30px; /* Đưa ra ngoài trái */
+  bottom: 80px; /* Đưa lên xa khỏi trục X dưới */
+  left: 80px; /* Đưa ra xa khỏi trục Y bên trái */
 }
 
 .value-complexity-quadrant--fill-ins .value-complexity-quadrant__label {
-  background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(226, 232, 240, 0.8) 100%);
-  border-color: rgba(100, 116, 139, 0.3);
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(226, 232, 240, 0.95) 100%);
+  border-color: rgba(100, 116, 139, 0.4);
+  border-width: 2px;
 }
 
 .value-complexity-quadrant--thankless-tasks {
-  bottom: 20px; /* Đưa xuống dưới cùng */
-  right: 30px; /* Đưa ra ngoài phải */
+  bottom: 80px; /* Đưa lên xa khỏi trục X dưới */
+  right: 50px; /* Đưa ra xa khỏi edge bên phải */
 }
 
 .value-complexity-quadrant--thankless-tasks .value-complexity-quadrant__label {
-  background: linear-gradient(135deg, rgba(254, 242, 242, 0.8) 0%, rgba(254, 202, 202, 0.8) 100%);
-  border-color: rgba(239, 68, 68, 0.3);
+  background: linear-gradient(135deg, rgba(254, 242, 242, 0.95) 0%, rgba(254, 202, 202, 0.95) 100%);
+  border-color: rgba(239, 68, 68, 0.4);
+  border-width: 2px;
 }
 
 /* Custom Tooltip Styles */
@@ -363,22 +363,22 @@
   border: 1px solid;
 }
 
-.value-complexity-tooltip__status--todo {
-  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-  color: #dc2626;
-  border-color: #fca5a5;
-}
-
-.value-complexity-tooltip__status--done {
+.value-complexity-tooltip__status--completed {
   background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
   color: #059669;
   border-color: #6ee7b7;
 }
 
-.value-complexity-tooltip__status--progress {
-  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-  color: #d97706;
-  border-color: #fcd34d;
+.value-complexity-tooltip__status--pending {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  color: #2563eb;
+  border-color: #93c5fd;
+}
+
+.value-complexity-tooltip__status--overdue {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  color: #dc2626;
+  border-color: #fca5a5;
 }
 
 .value-complexity-tooltip__content {
@@ -460,8 +460,17 @@
     gap: 20px;
   }
   
-  .value-complexity-quadrant {
-    display: none; /* Hide quadrant labels on smaller screens */
+  /* Giữ quadrant labels nhưng làm nhỏ lại */
+  .value-complexity-quadrant__label {
+    padding: 6px 10px;
+  }
+  
+  .value-complexity-quadrant__text {
+    font-size: 11px;
+  }
+  
+  .value-complexity-quadrant small {
+    font-size: 9px;
   }
 }
 
@@ -488,6 +497,11 @@
   
   .value-complexity-tooltip__title {
     font-size: 14px;
+  }
+  
+  /* Ẩn quadrant labels trên tablet */
+  .value-complexity-quadrant {
+    display: none;
   }
 }
 
