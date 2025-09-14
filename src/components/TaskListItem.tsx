@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import TaskItem from './TaskItem';
 import TaskModal from './AddTask'; // Updated import to TaskModal
+import TaskStats from './TaskStats'; // Import the extracted TaskStats component
 import { useTasks } from '@/contexts/tasks.context';
 import { Task } from '@/interface/task';
+import { calculateTaskStats } from '@/utils/taskStats'; // Import the utility function
 import "@/css/TaskListItem.css";
 
 // ----------------------------
@@ -64,37 +66,6 @@ const TaskList: React.FC = () => {
 export default TaskList;
 
 // ----------------------------
-// Stats
-// ----------------------------
-interface TaskStatsProps {
-    stats: {
-        incomplete: number;
-        completed: number;
-        overdue: number;
-    };
-}
-
-function TaskStats ( { stats }: TaskStatsProps ) {
-    return (
-        <div className="task-stats">
-            <h1 className="welcome">Welcome to TaskMind</h1>
-            <div className="stat-item">
-                <span className="stat-number">{ stats.incomplete }</span>
-                <span className="stat-label-incomplete">Chưa hoàn thành</span>
-            </div>
-            <div className="stat-item">
-                <span className="stat-number">{ stats.completed }</span>
-                <span className="stat-label-complete">Đã hoàn thành</span>
-            </div>
-            <div className="stat-item">
-                <span className="stat-number">{ stats.overdue }</span>
-                <span className="stat-label-duedate">Quá hạn</span>
-            </div>
-        </div>
-    );
-}
-
-// ----------------------------
 // Tasks Container
 // ----------------------------
 interface TasksContainerProps {
@@ -118,14 +89,10 @@ function TasksContainer ( {
         if ( a.completed !== b.completed ) {
             return a.completed ? 1 : -1; // incomplete first
         }
-        return new Date( a.dueDate ).getTime() - new Date( b.dueDate ).getTime();
+        return new Date( a.deadline ).getTime() - new Date( b.deadline ).getTime();
     } );
 
-    const stats = {
-        incomplete: tasks.filter( task => !task.completed ).length,
-        completed: tasks.filter( task => task.completed ).length,
-        overdue: tasks.filter( task => new Date( task.dueDate ) < new Date() && !task.completed ).length
-    };
+    const stats = calculateTaskStats(tasks);
 
     const handleToggleComplete = ( id: string ) => {
         setLoadingTaskId( id );

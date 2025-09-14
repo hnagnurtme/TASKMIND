@@ -2,7 +2,8 @@ import TaskProgress from "@/components/TaskProgress";
 import { useTasks } from '@/contexts/tasks.context';
 import { useState, useEffect } from 'react';
 import "@/css/home.css";
-import CalendarView from "@/components/Calendar";
+
+import { Assistant } from "@/components/Assitant";
 
 export default function AI () {
     const { tasks } = useTasks();
@@ -24,7 +25,7 @@ export default function AI () {
     return (
         <div className="main-content">
             <TaskProgress completionPercent={ completionPercent } />
-            < CalendarView />
+            <Assistant tasks={tasks} />
         </div>
     );
 }

@@ -10,6 +10,7 @@ const useAddTask = ({ onAddTask, onClose }: UseAddTaskProps) => {
   const [formData, setFormData] = useState({
     title: "",
     deadline: "",
+    value : "medium" as "high" | "medium" | "low",
     complexity: "medium" as "high" | "medium" | "low",
     priority: "medium" as "high" | "medium" | "low",
     note: "",
@@ -54,6 +55,7 @@ const useAddTask = ({ onAddTask, onClose }: UseAddTaskProps) => {
       onAddTask({
         title: formData.title.trim(),
         deadline: new Date(formData.deadline).toISOString(),
+        value: formData.priority,
         complexity: formData.complexity,
         priority: formData.priority,
         note: formData.note.trim(),
@@ -68,6 +70,7 @@ const useAddTask = ({ onAddTask, onClose }: UseAddTaskProps) => {
     setFormData({
       title: "",
       deadline: "",
+      value: "medium",
       complexity: "medium",
       priority: "medium",
       note: "",

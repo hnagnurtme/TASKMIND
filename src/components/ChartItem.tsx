@@ -7,6 +7,7 @@ import {
 } from "recharts"
 import { useTasks } from "@/contexts/tasks.context"
 import "@/css/CharItem.css"
+import { calculateTaskStats } from "@/utils/taskStats"
 
 // ================== COLORS ==================
 const COLORS = {
@@ -14,7 +15,33 @@ const COLORS = {
   medium: "#f59e0b", // cam
   low: "#10b981",    // xanh lá
 }
+interface TaskStatsProps {
+    stats: {
+        incomplete: number;
+        completed: number;
+        overdue: number;
+    };
+}
 
+function TaskStats ( { stats }: TaskStatsProps ) {
+    return (
+        <div className="task-stats">
+            <h1 className="welcome">Welcome to TaskMind</h1>
+            <div className="stat-item">
+                <span className="stat-number">{ stats.incomplete }</span>
+                <span className="stat-label-incomplete">Chưa hoàn thành</span>
+            </div>
+            <div className="stat-item">
+                <span className="stat-number">{ stats.completed }</span>
+                <span className="stat-label-complete">Đã hoàn thành</span>
+            </div>
+            <div className="stat-item">
+                <span className="stat-number">{ stats.overdue }</span>
+                <span className="stat-label-duedate">Quá hạn</span>
+            </div>
+        </div>
+    );
+}
 export default function ChartItem() {
   const { tasks } = useTasks()
 
@@ -59,8 +86,12 @@ export default function ChartItem() {
       count,
     }))
   }, [tasks])
+  
+  
 
   return (
+    <div >
+         <TaskStats stats={calculateTaskStats(tasks)} />
     <div className="charts-grid">
       {/* Donut Chart */}
       <div className="chart-card">
@@ -118,5 +149,7 @@ export default function ChartItem() {
         </ResponsiveContainer>
       </div>
     </div>
+    </div>
   )
 }
+
