@@ -30,6 +30,11 @@
    ```bash
    npm start
    ```
+5. Test user account:
+    ```
+    Email: testuser@gmail.com
+    Password: 123456
+    ```
 
 ## 🔗 Deployed Web URL or APK file
 ✍️ [TASKMIND](https://taskmind-gjro.onrender.com/)
