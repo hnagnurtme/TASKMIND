@@ -37,11 +37,11 @@
     ```
 
 ## 🔗 Deployed Web URL or APK file
-✍️ [TASKMIND](https://taskmind-gjro.onrender.com/)
+✍️ [TASKMIND](https://taskmind-ruddy.vercel.app)
 
 ## 🎥 Demo Video
 **Demo video link (≤ 2 minutes):**  
-✍️ [Demo Video](https://www.loom.com/share/your_demo_video_link)
+✍️ [Demo Video](https://www.youtube.com/watch?v=hpEz1RInm8g)
 ## 💻 Project Introduction
 
 ### a. Overview
